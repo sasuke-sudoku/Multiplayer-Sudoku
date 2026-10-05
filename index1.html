@@ -657,7 +657,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
       </div>
       <p class="err" id="home-err" role="alert"></p>
       <p class="note" id="room-note" style="margin:6px 4px 0"></p>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-2</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-3</span></nav>
     </div>
   </section>
 
@@ -859,7 +859,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
           </div>
         </div>
       </div>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-2</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-3</span></nav>
     </div>
   </section>
 
@@ -994,7 +994,7 @@ const FIREBASE_CONFIG = {
 /* ▼ App Check（あなたのサイト以外からの書き込みを防ぐ）
    Google Cloud の reCAPTCHA で作った「サイトキー」を貼り付けてください。空のままなら使いません。 */
 const APP_CHECK_SITE_KEY = "";
-const APP_VERSION = "2026.10.01-2";
+const APP_VERSION = "2026.10.01-3";
 const APP_BUILD = 6;   // 対戦相手と版が違うかを見分ける番号（更新のたびに増やす）
 /* ▼ 機能のオン・オフ（あとで公開するときは true にするだけ） */
 const FEATURES = {
@@ -1295,7 +1295,8 @@ const FB = { ok:false, db:null, uid:null, offset:0, connected:true };
 function serverNow(){ return Date.now() + FB.offset; }
 const TS = () => (window.firebase && firebase.database && firebase.database.ServerValue) ? firebase.database.ServerValue.TIMESTAMP : Math.round(serverNow());
 FB.ready = (async () => {
-  if (!window.firebase || !FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.databaseURL) return false;
+  if (!window.firebase){ FB.err = 'Firebaseの部品を読み込めませんでした（広告ブロックや通信制限の可能性）'; return false; }
+  if (!FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.databaseURL){ FB.err = 'index1.html にFirebaseの設定が入っていません'; return false; }
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     if (APP_CHECK_SITE_KEY && firebase.appCheck){
@@ -1305,7 +1306,9 @@ FB.ready = (async () => {
     const auth = firebase.auth();
     try { await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); } catch(e){}
     let user = await new Promise(res => { const un = auth.onAuthStateChanged(u => { un(); res(u); }); });
+    FB.step = '匿名ログイン';
     if (!user) user = (await auth.signInAnonymously()).user;
+    FB.step = 'データベース';
     FB.user = user; FB.uid = user.uid; FB.db = firebase.database();
     auth.onAuthStateChanged(u => { if (u){ FB.user = u; FB.uid = u.uid; } renderAccount(); });
     FB.db.ref('.info/serverTimeOffset').on('value', snap => { FB.offset = Number(snap.val()) || 0; });
@@ -1319,12 +1322,12 @@ FB.ready = (async () => {
     FB.ok = true;
     if (FEATURES.accounts) cloudSync();
     return true;
-  } catch(e){ console.error(e); return false; }
+  } catch(e){ console.error(e); FB.err = `${FB.step || '初期化'}で失敗：${(e && (e.code || e.message)) || e}`; return false; }
 })();
 FB.ready.then(ok => {
   if (ok) return;
   $('#room-note').textContent = FIREBASE_CONFIG.apiKey
-    ? 'オンラインにつながりませんでした。練習モードは使えます。ページを読み込み直してみてください。'
+    ? `オンラインにつながりませんでした（${FB.err || '不明'}）。練習モードは使えます。`
     : 'オンライン機能の設定（Firebase）がまだです。練習モードは使えます。';
 });
 
@@ -3170,7 +3173,7 @@ async function runDiag(){
   const log = (ok, msg) => { lines.push((ok === null ? '・' : ok ? '✅ ' : '❌ ') + msg); out.textContent = lines.join('\n'); };
   log(null, `Ver ${APP_VERSION} / ${navigator.userAgent.slice(0, 80)}`);
   const ok = await FB.ready;
-  if (!ok){ log(false, 'Firebaseに接続できません（設定・匿名ログイン・ネットを確認）'); return; }
+  if (!ok){ log(false, 'Firebaseに接続できません'); log(false, '理由：' + (FB.err || '不明')); return; }
   log(true, `ログイン OK（ID ${String(FB.uid).slice(0,6)}…）`);
   log(null, `時計のずれ ${Math.round(FB.offset)}ms / 接続 ${FB.connected ? 'あり' : 'なし'}`);
   const code = 'T' + randCode().slice(1);
