@@ -150,6 +150,9 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
 .about .demo-box{margin-top:16px}
 .lead{margin-top:2px;font-weight:700;font-size:.9em}
 .lead.up{color:var(--go)} .lead.down{color:var(--primary)} .lead.even{color:var(--sub)}
+.lead .n{color:#A3E635;font-family:var(--num);font-weight:800;font-size:1.18em;padding:0 1px}
+:root[data-theme="light"] .lead .n{color:#4D7C0F}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .lead .n{color:#4D7C0F}}
 .round-tag{display:inline-block;font-family:var(--num);font-weight:800;letter-spacing:.12em;font-size:.85em;color:var(--sub);margin-bottom:2px}
 .count.word{font-size:min(15vw,96px);letter-spacing:.04em}
 .count.ready{color:var(--ink)}
@@ -368,10 +371,44 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
 .bot-card .seg{margin-bottom:12px}
 .legal{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin:28px 0 8px;font-size:.8em}
 .legal a{color:var(--sub);text-decoration:none}
+.legal .ver{color:var(--sub);opacity:.6;font-family:var(--num)}
 .legal a:hover{color:var(--ink);text-decoration:underline}
 .hgrid .hcard-full{grid-column:1/-1}
 .hgrid .hcard.hcard-full{flex-direction:row;align-items:center;min-height:84px;gap:14px}
 .hgrid .hcard-full .chev{position:static}
+.timer-card{flex-wrap:wrap}
+.lead{font-size:.88em}
+.race{flex-basis:100%;display:grid;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.race-row{display:grid;grid-template-columns:22px 24px 1fr auto;align-items:center;gap:8px;font-size:.78em}
+.race-row .rk{font-family:var(--num);font-weight:800;text-align:center;color:var(--sub)}
+.race-row .avatar{width:24px;height:24px;font-size:.72em}
+.race-row .avatar.emo{font-size:.95em}
+.race-row .rb{position:relative;height:10px;border-radius:5px;background:var(--bg);overflow:hidden}
+.race-row .rb span{position:absolute;left:0;top:0;bottom:0;border-radius:5px;transition:width .35s ease}
+.race-row .rn{font-family:var(--num);font-weight:700;color:var(--sub);min-width:4.2em;text-align:right;white-space:nowrap}
+.race-row.me .rn{color:var(--ink)}
+.race-row.me .rb{outline:1.5px solid var(--ink);outline-offset:1px}
+@media (max-width:860px) and (max-height:780px){
+  main:has(#scr-game.on){padding-top:8px}
+  .key{height:46px;font-size:1.45em}
+  .pad{gap:6px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px))}
+  #scr-game.on{padding-bottom:calc(180px + env(safe-area-inset-bottom,0px))}
+  .board{--cs:max(26px,min(58px,calc((100vw - 48px) / 9),calc((100svh - 360px) / 9)))}
+  #scr-game.has-race .board{--cs:max(26px,min(58px,calc((100vw - 48px) / 9),calc((100svh - 420px) / 9)))}
+}
+@media (max-width:860px){ #pad .key{height:clamp(38px,6.8svh,56px);font-size:clamp(1.3em,3.2svh,1.6em)} #pad{gap:6px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px))} #scr-game .timer-card{gap:8px} }
+@media (max-width:860px){
+  #scr-game .timer-card{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:10px;row-gap:2px}
+  #scr-game .timer-card > div:first-child{display:contents}
+  #scr-game .timer{grid-column:1;grid-row:1}
+  #scr-game .timer-meta{grid-column:2;grid-row:1;line-height:1.35}
+  #scr-game .lead{grid-column:1 / -1;grid-row:2;margin:0;font-size:.84em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #scr-game .race{grid-column:1 / -1;grid-row:3}
+}
+@media (max-width:860px){ body:has(#scr-game.on) .bar-in{height:48px} body:has(#scr-game.on) .logo-mark{width:26px;height:26px} main:has(#scr-game.on){padding-top:8px} }
+@media (max-width:860px){ #scr-game.has-race .players{display:none} }
+.diag{padding:16px}
+.diag-out{margin:12px 0 0;padding:12px;border-radius:12px;background:var(--bg);font-family:var(--num),monospace;font-size:.78em;line-height:1.7;white-space:pre-wrap;word-break:break-all}
 .about{padding:18px 20px}
 .about h2{font-size:1.05em;margin:0 0 8px;font-weight:900}
 .about p{margin:0;color:var(--sub);font-size:.92em}
@@ -492,6 +529,15 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media (max-width:860px){
+  .board{--cs:max(26px,min(58px,calc((100vw - 48px) / 9),calc((100svh - 400px) / 9)))}
+  #scr-game.has-race .board{--cs:max(26px,min(58px,calc((100vw - 48px) / 9),calc((100svh - 455px) / 9)))}
+  #scr-game .timer-card{padding:10px 14px}
+  #scr-game .timer{font-size:1.6em}
+  #scr-game .timer-meta{font-size:.8em}
+  .race{margin-top:8px;padding-top:8px;gap:4px}
+  .race-row{grid-template-columns:18px 20px 1fr auto;gap:6px}
+  .race-row .avatar{width:20px;height:20px}
+  .race-row .rb{height:8px}
   .game{display:flex;flex-direction:column;gap:12px}
   .side{display:contents}
   .board-wrap{width:100%;display:flex;justify-content:center}
@@ -611,7 +657,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
       </div>
       <p class="err" id="home-err" role="alert"></p>
       <p class="note" id="room-note" style="margin:6px 4px 0"></p>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.09.30-3</span></nav>
     </div>
   </section>
 
@@ -651,6 +697,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
         <div class="radar" aria-hidden="true">🔎</div>
         <b>対戦相手を探しています…</b>
         <div class="num" id="find-time">0秒</div>
+        <p class="note" id="find-status" style="margin:-8px 0 14px;font-size:.78em"></p>
         <div id="bot-now-wrap" hidden>
           <p class="note" style="margin:0 0 10px">まだ相手が見つかりません。ロボットと対戦しますか？</p>
           <button class="btn btn-primary" id="btn-bot-now" style="margin-bottom:10px">🤖 待たずにロボットと対戦</button>
@@ -792,6 +839,13 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
         </div>
       </div>
 
+      <div class="sec-title">通信チェック</div>
+      <div class="card diag">
+        <p class="note" style="margin:0 0 10px">オンライン対戦がうまくいかないときに押してください。結果の画面を送ってもらえれば、原因が分かります。</p>
+        <button class="btn btn-line" id="btn-diag">通信チェックをする</button>
+        <pre class="diag-out" id="diag-out" hidden></pre>
+      </div>
+
       <div class="sec-title">このサイトについて</div>
       <div class="card about">
         <h2>ナンプレのスピード対戦</h2>
@@ -805,7 +859,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
           </div>
         </div>
       </div>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.09.30-3</span></nav>
     </div>
   </section>
 
@@ -845,6 +899,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
         <div class="card timer-card">
           <div><div class="timer num" id="timer">00:00</div><div class="lead" id="lead" hidden></div></div>
           <div class="timer-meta"><div id="diff-label">ふつう</div><div id="miss-line">ミス <b class="num" id="miss">0</b>（+10秒）</div><div class="hearts" id="hearts" hidden></div></div>
+          <div class="race" id="race" hidden aria-label="みんなの進み具合"></div>
         </div>
         <div class="card pad" id="pad"></div>
         <div class="card list players" id="game-list"></div>
@@ -939,6 +994,7 @@ const FIREBASE_CONFIG = {
 /* ▼ App Check（あなたのサイト以外からの書き込みを防ぐ）
    Google Cloud の reCAPTCHA で作った「サイトキー」を貼り付けてください。空のままなら使いません。 */
 const APP_CHECK_SITE_KEY = "";
+const APP_VERSION = "2026.09.30-3";
 /* ▼ 機能のオン・オフ（あとで公開するときは true にするだけ） */
 const FEATURES = {
   stages: false,    // ひとりで進めるステージモード（200ステージ）
@@ -1092,7 +1148,7 @@ function renderHomeRec(){
   $('#hr-streak').textContent = st.streak;
   $('#hr-rate').textContent = st.rate;
   const od = clampInt(store.get('np-online-diff') ?? 1, 0, 3);
-  $('#tile-online-desc').textContent = `${DIFFS[od].name}で今すぐ対戦（相手を自動で探します）`;
+  $('#tile-online-desc').textContent = '難易度を選んで、だれかと対戦（ロボットとも対戦できます）';
 }
 function renderGrowth(st){
   const now = Date.now(), wk = 7*86400000;
@@ -1176,7 +1232,7 @@ function renderProfile(){
 }
 $('#tile-profile').onclick = () => show('scr-profile');
 $('#tile-friend').onclick = () => show('scr-friend');
-$('#tile-online').onclick = () => { renderOnlineDiffs(); show('scr-online'); findMatch(); };
+$('#tile-online').onclick = () => { renderOnlineDiffs(); setSearching(false); $('#online-err').textContent = ''; show('scr-online'); };
 $('#tile-rank').onclick = () => { show('scr-rank'); loadRanking(); };
 if (!FEATURES.ranking){
   $('#tile-rank').hidden = true;
@@ -1619,7 +1675,7 @@ function startMatch(cfg){
   $('#result-bg').classList.remove('on');
   $('#btn-giveup').hidden = false;
   buildPad(); buildBoard(); renderPlayers();
-  show('scr-game');
+  show('scr-game'); window.scrollTo(0,0); fitBoardSoon();
   S.phase = 'count'; pushPresence(); saveSession();
   if (S.mode === 'bot' && S.named && S.named.botStart) S.named.botStart(cfg, S.puzzle);
   const begin = () => {
@@ -1845,15 +1901,81 @@ function renderPlayers(){
 function renderLead(){
   const el = $('#lead');
   const opp = S.solo || !S.named ? [] : roundPeers().filter(p => !p.sameTab);
+  renderRace();
   if (!opp.length || S.phase !== 'play'){ el.hidden = true; return; }
   el.hidden = false;
   const doneOpp = opp.find(p => presenceOf(p).st === 'done' && tOf(presenceOf(p)) > 0);
-  if (doneOpp){ el.className = 'lead down'; el.textContent = `${cleanNick(presenceOf(doneOpp).nick)}さんがクリア！`; return; }
-  const top = Math.max(...opp.map(p => clampInt(presenceOf(p).ok,0,81)));
-  const diff = correctCount() - top;
-  if (diff > 0){ el.className = 'lead up'; el.textContent = `🔥 ${diff}マス リード中`; }
-  else if (diff < 0){ el.className = 'lead down'; el.textContent = `あと${-diff}マスで追いつく`; }
-  else { el.className = 'lead even'; el.textContent = '⚔️ 並んでいます'; }
+  if (doneOpp){ el.className = 'lead down'; el.textContent = `🏁 ${cleanNick(presenceOf(doneOpp).nick)}さんがクリアしました`; return; }
+  const mine = correctCount();
+  const others = opp.map(p => clampInt(presenceOf(p).ok, 0, 81));
+  const top = Math.max(...others);
+  if (mine > top){
+    const second = top;
+    el.className = 'lead up';
+    el.innerHTML = `🥇 トップ！ 2位に<span class="n">${mine - second}マス</span>リード`;
+  } else if (mine === top){
+    el.className = 'lead even';
+    el.textContent = mine === 0 ? '⚔️ スタート！ 全員同じ問題です' : '⚔️ トップに並んでいます';
+  } else {
+    const rank = 1 + others.filter(o => o > mine).length;
+    const medal = rank === 2 ? '🥈 ' : rank === 3 ? '🥉 ' : '';
+    el.className = 'lead down';
+    el.innerHTML = `${medal}${rank}位・トップと<span class="n">${top - mine}マス</span>差`;
+  }
+}
+// 相手の進み具合をひと目で見られる小さな表（タイマーの下）
+// スマホでは、盤面が数字キーに隠れないように、実際の空き高さから盤面の大きさを決める
+function fitBoard(){
+  const board = $('#board'), pad = $('#pad');
+  if (!board || !$('#scr-game').classList.contains('on')) return;
+  const vw = window.innerWidth;
+  if (vw > 860){ board.style.removeProperty('--cs'); $('#scr-game').style.paddingBottom = ''; return; }
+  board.style.setProperty('--cs', '20px');                       // いったん小さくして位置を測る
+  const top = board.getBoundingClientRect().top + window.scrollY;
+  const padTop = pad.getBoundingClientRect().top + window.scrollY;
+  const avail = padTop - top - 12 - 4;                            // すき間と枠線の分
+  const cs = Math.floor(Math.max(20, Math.min(58, (vw - 48) / 9, avail / 9)));
+  board.style.setProperty('--cs', cs + 'px');
+  $('#scr-game').style.paddingBottom = (pad.getBoundingClientRect().height + 12) + 'px';
+}
+let fitT = null;
+function fitBoardSoon(){ cancelAnimationFrame(fitT); fitT = requestAnimationFrame(fitBoard); }
+window.addEventListener('resize', fitBoardSoon);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', fitBoardSoon);
+if (window.ResizeObserver){ const ro = new ResizeObserver(fitBoardSoon); ro.observe(document.querySelector('#scr-game .timer-card')); ro.observe(document.querySelector('#pad')); }
+function renderRace(){
+  const box = $('#race'); if (!box) return;
+  const list = S.solo || !S.named ? [] : roundPeers();
+  const show = list.length >= 2 && (S.phase === 'play' || S.phase === 'done' || S.phase === 'count');
+  if ($('#scr-game').classList.contains('has-race') !== show){ $('#scr-game').classList.toggle('has-race', show); fitBoardSoon(); }
+  if (!show){ box.hidden = true; box.innerHTML = ''; return; }
+  const need = needCount() || 1;
+  const rows = list.map(p => {
+    const pr = presenceOf(p);
+    const done = p.sameTab ? S.phase === 'done' && !S.gaveUp : (pr.st === 'done' && tOf(pr) > 0);
+    const ok = p.sameTab ? correctCount() : clampInt(pr.ok, 0, 81);
+    return { p, pr, ok: done ? need : ok, done, me: p.sameTab, nick: p.sameTab ? 'あなた' : cleanNick(pr.nick), col: colorOf(p.peer) };
+  }).sort((a, b) => b.ok - a.ok || (b.me ? 1 : 0) - (a.me ? 1 : 0));
+  // 同じ色の人がいたら、見分けられるように別の色にする
+  const used = new Set();
+  rows.forEach(r => { if (used.has(r.col)){ r.col = AV_COLORS.find(c => !used.has(c)) || r.col; } used.add(r.col); });
+  box.hidden = false; box.innerHTML = '';
+  let prev = null, rank = 0;
+  rows.slice(0, 4).forEach((r, k) => {
+    if (r.ok !== prev){ rank = k + 1; prev = r.ok; }
+    const row = document.createElement('div'); row.className = 'race-row' + (r.me ? ' me' : '');
+    const rk = document.createElement('span'); rk.className = 'rk'; rk.textContent = r.done ? '🏁' : rank;
+    const av = avatarEl(r.me ? nickOrDefault() : r.nick, r.col, r.me ? S.icon : r.pr.icon);
+    av.title = r.nick;
+    const rb = document.createElement('span'); rb.className = 'rb';
+    const fill = document.createElement('span'); fill.style.width = Math.min(100, r.ok / need * 100) + '%'; fill.style.background = r.col;
+    rb.appendChild(fill);
+    const rn = document.createElement('span'); rn.className = 'rn';
+    rn.textContent = r.done ? 'クリア' : `${r.ok}/${need}`;
+    row.append(rk, av, rb, rn);
+    row.setAttribute('aria-label', `${rank}位 ${r.nick} ${r.done ? 'クリア' : r.ok + 'マス'}`);
+    box.appendChild(row);
+  });
 }
 function checkOthersFinish(){
   if (S.solo) return;
@@ -2015,7 +2137,7 @@ function resumeMatch(x){
   $('#diff-label').textContent = (DIFFS[cfg.d]||DIFFS[1]).name; $('#miss').textContent = S.miss;
   $('#result-bg').classList.remove('on'); $('#overlay').classList.remove('on');
   buildPad(); buildBoard(); $('#board').classList.remove('veil');
-  show('scr-game');
+  show('scr-game'); window.scrollTo(0,0); fitBoardSoon();
   clearInterval(S.timerI);
   if (S.finishT || S.gaveUp){ S.phase = 'done'; $('#timer').textContent = fmt(S.finishT); pushPresence(); showResult(); }
   else if (serverNow() < S.startAt){ S.phase = 'count'; pushPresence(); countdown(S.startAt, () => { S.phase='play'; $('#board').classList.remove('veil'); S.timerI = setInterval(tick,100); render(); pushPresence(); }); }
@@ -2057,12 +2179,21 @@ async function findMatch(tries = 0){
   S.finding = true; setSearching(true);
   const d = S.onlineDiff;
   const ref = FB.db.ref('match/' + d);
-  S.matchRef = ref;
+  if (S.matchRef !== ref || !S.matchListen){
+    stopMatchListen();
+    S.matchRef = ref;
+    // 待ち札を常に見張っておく（これがないと、取り合いの処理が古い情報で失敗することがある）
+    await new Promise(res => {
+      let first = true;
+      S.matchListen = ref.on('value', snap => { S.matchVal = snap.val(); if (first){ first = false; res(); } }, () => res());
+    });
+  }
   const fresh = c => c && typeof c === 'object' && c.uid !== FB.uid && /^[A-Z0-9]{5}$/.test(c.room || '') && serverNow() - (Number(c.ts)||0) < 40000;
   // 1) 待っている人がいれば、先にその部屋へ入ってから、待ち札を取る（入っていない人は札を消せないルール）
-  let cur = null;
-  try { cur = (await ref.get()).val(); } catch(e){}
+  const cur = S.matchVal || null;
   if (!S.finding) return;
+  const st = t => { const e = $('#find-status'); if (e) e.textContent = t; };
+  st(cur ? '待っている人を確認しています…' : 'だれも待っていないので、あなたが待ちます');
   if (fresh(cur)){
     const joined = await enterRoom(cur.room, false, { mode:'online', stay:true, quiet:true, errEl:'#online-err' });
     if (!S.finding) return;
@@ -2070,6 +2201,7 @@ async function findMatch(tries = 0){
       let took = false;
       try { const r = await ref.transaction(c => (c && c.uid === cur.uid && c.room === cur.room) ? null : undefined); took = r.committed; } catch(e){ console.warn(e); }
       if (took){ matched(); return; }
+      st('相手が別の人と始めたので、もう一度探します…');
       if (S.named){ try { await S.named.leave(); } catch(e){} S.named = null; }
     }
     $('#online-err').textContent = '';
@@ -2090,10 +2222,15 @@ async function findMatch(tries = 0){
     return findMatch(tries + 1);
   }
   ref.onDisconnect().remove();
+  st(`相手を待っています（ルーム ${S.code}）`);
   S.matchKeep = setInterval(() => {
     if (!S.finding) return;
     ref.transaction(c => (c && c.uid === FB.uid) ? { uid: FB.uid, room: S.code, ts: Math.round(serverNow()) } : undefined).catch(()=>{});
   }, 15000);
+}
+function stopMatchListen(){
+  if (S.matchRef && S.matchListen){ try { S.matchRef.off('value', S.matchListen); } catch(e){} }
+  S.matchListen = null; S.matchVal = null;
 }
 function stopMatchWait(){
   clearInterval(S.matchKeep); S.matchKeep = null;
@@ -2102,7 +2239,7 @@ function stopMatchWait(){
 function matched(){
   if (!S.finding) return;
   S.finding = false; stopMatchWait(); setSearching(false);
-  if (S.matchRef) S.matchRef.transaction(cur => (cur && cur.uid === FB.uid) ? null : undefined).catch(()=>{});
+  if (S.matchRef) S.matchRef.transaction(cur => (cur && cur.uid === FB.uid) ? null : undefined).catch(()=>{}).finally(stopMatchListen);
   S.justMatched = true;
   S.diff = S.onlineDiff;
   toast('対戦相手が見つかりました！');
@@ -2111,6 +2248,7 @@ function matched(){
 async function cancelFind(silent){
   S.finding = false; stopMatchWait(); setSearching(false);
   if (S.matchRef){ try { await S.matchRef.transaction(cur => (cur && cur.uid === FB.uid) ? null : undefined); } catch(e){} }
+  stopMatchListen();
   if (!silent){ if (S.named){ try { await S.named.leave(); } catch(e){} S.named = null; } S.peers = []; S.phase = 'home'; }
 }
 $('#btn-find').onclick = findMatch;
@@ -2923,7 +3061,7 @@ renderBotLevels();
 function botRoom(level){
   const L = BOT_LEVELS[level] || BOT_LEVELS[1];
   const ME = 'me', BOT = 'bot';
-  const mine = {}, bot = { v:1, since:0, nick:`ロボ（${L.name}）`, icon:'🤖', col:'#64748B', rate:1000, st:'lobby', round:0, ok:0, need:0, miss:0, fill:'', t:null, on:true };
+  const mine = {}, bot = { v:1, since:0, nick:`ロボ（${L.name}）`, icon:'🤖', col:'#6B7280', rate:1000, st:'lobby', round:0, ok:0, need:0, miss:0, fill:'', t:null, on:true };
   const listeners = [];
   let timer = null, closed = false;
   const resolve = v => (v && typeof v === 'object' && v['.sv']) ? Math.round(serverNow()) : v;
@@ -2981,6 +3119,35 @@ async function startBotMatch(){
 }
 $('#btn-bot').onclick = () => startBotMatch();
 $('#btn-bot-now').onclick = () => startBotMatch();
+
+/* ---------- connection diagnostics ---------- */
+async function runDiag(){
+  const out = $('#diag-out'); out.hidden = false;
+  const lines = [];
+  const log = (ok, msg) => { lines.push((ok === null ? '・' : ok ? '✅ ' : '❌ ') + msg); out.textContent = lines.join('\n'); };
+  log(null, `Ver ${APP_VERSION} / ${navigator.userAgent.slice(0, 80)}`);
+  const ok = await FB.ready;
+  if (!ok){ log(false, 'Firebaseに接続できません（設定・匿名ログイン・ネットを確認）'); return; }
+  log(true, `ログイン OK（ID ${String(FB.uid).slice(0,6)}…）`);
+  log(null, `時計のずれ ${Math.round(FB.offset)}ms / 接続 ${FB.connected ? 'あり' : 'なし'}`);
+  const code = 'T' + randCode().slice(1);
+  const room = FB.db.ref('rooms/' + code);
+  try { const r = await room.child('host').transaction(c => c === null ? FB.uid : undefined); log(r.committed, 'ルームを作る ' + (r.committed ? 'OK' : '失敗')); }
+  catch(e){ log(false, 'ルームを作る：' + (e.code || e.message)); return; }
+  try { await room.child('created').set(TS()); log(true, '作成時刻 OK'); } catch(e){ log(false, '作成時刻：' + (e.code || e.message)); }
+  try { await room.child('players/' + FB.uid).update({ v:1, since: Math.round(serverNow()), nick: nickOrDefault(), icon: S.icon || '', col: S.color, rate: loadStats().rate, st:'lobby', round:0, ok:0, need:0, miss:0, fill:'', on:true }); log(true, '参加者の書き込み OK'); }
+  catch(e){ log(false, '参加者の書き込み：' + (e.code || e.message)); }
+  try { await room.child('players/' + FB.uid).update({ cfg: { d:1, seed:0, round:0 } }); log(true, 'ホスト設定 OK'); }
+  catch(e){ log(false, 'ホスト設定：' + (e.code || e.message)); }
+  try { const v = (await room.get()).val(); log(!!(v && v.players), 'ルームの読み込み ' + (v && v.players ? 'OK' : '空')); }
+  catch(e){ log(false, 'ルームの読み込み：' + (e.code || e.message)); }
+  const mref = FB.db.ref('match/0');
+  try { const v = (await mref.get()).val(); log(true, 'マッチング待ちの読み込み OK（' + (v ? '待っている人あり' : 'だれもいない') + '）'); }
+  catch(e){ log(false, 'マッチング待ちの読み込み：' + (e.code || e.message)); }
+  try { await room.remove(); log(true, 'テスト用ルームの削除 OK'); } catch(e){ log(false, 'テスト用ルームの削除：' + (e.code || e.message)); }
+  log(null, 'チェック完了');
+}
+$('#btn-diag').onclick = runDiag;
 
 })();
 </script>
