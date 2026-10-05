@@ -657,7 +657,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
       </div>
       <p class="err" id="home-err" role="alert"></p>
       <p class="note" id="room-note" style="margin:6px 4px 0"></p>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.09.30-3</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-1</span></nav>
     </div>
   </section>
 
@@ -859,7 +859,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
           </div>
         </div>
       </div>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.09.30-3</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-1</span></nav>
     </div>
   </section>
 
@@ -994,7 +994,8 @@ const FIREBASE_CONFIG = {
 /* ▼ App Check（あなたのサイト以外からの書き込みを防ぐ）
    Google Cloud の reCAPTCHA で作った「サイトキー」を貼り付けてください。空のままなら使いません。 */
 const APP_CHECK_SITE_KEY = "";
-const APP_VERSION = "2026.09.30-3";
+const APP_VERSION = "2026.10.01-1";
+const APP_BUILD = 5;   // 対戦相手と版が違うかを見分ける番号（更新のたびに増やす）
 /* ▼ 機能のオン・オフ（あとで公開するときは true にするだけ） */
 const FEATURES = {
   stages: false,    // ひとりで進めるステージモード（200ステージ）
@@ -1265,7 +1266,7 @@ function renderIcons(){
 }
 renderIcons(); renderSwatches(); renderStats(); renderHomeRec();
 
-async function goHome(){
+async function goHome(){ clearTimeout(S.lonelyT); S.lonelyT = null; S.warnedVer = false;
   S.countToken = (S.countToken||0) + 1;
   clearInterval(S.timerI);
   ['#overlay','#result-bg','#confirm-bg','#stage-sheet','#stage-result'].forEach(id => $(id).classList.remove('on'));
@@ -1544,7 +1545,7 @@ function pushPresence(){
   clearTimeout(presT);
   presT = setTimeout(() => {
     const st = S.phase === 'play' || S.phase === 'count' ? 'play' : S.phase === 'done' ? 'done' : 'lobby';
-    const patch = { v:1, since: S.since, nick: nickOrDefault(), icon: S.icon, col: S.color, rate: loadStats().rate, st, round: S.round, ok: correctCount(), need: needCount(), miss: S.miss, fill: fillString(), t: S.finishT || null };
+    const patch = { v: APP_BUILD, since: S.since, nick: nickOrDefault(), icon: S.icon, col: S.color, rate: loadStats().rate, st, round: S.round, ok: correctCount(), need: needCount(), miss: S.miss, fill: fillString(), t: S.finishT || null };
     if (isHost()){ patch.cfg = { d: S.diff, seed: S.cfg ? S.cfg.seed : 0, round: S.hostRound }; if (S.cfg && S.cfg.startAt) patch.cfg.startAt = S.cfg.startAt; }
     if (S.named) S.named.presence(patch).catch(()=>{});
   }, 60);
@@ -1572,6 +1573,18 @@ function onRoomUpdate(){
   }
   // online matchmaking: opponent arrived
   if (S.mode === 'online' && S.finding && members().length >= 2){ matched(); }
+  // 相手の版が違うと正しく遊べないので知らせる
+  if (S.named && S.mode !== 'bot'){
+    const old = members().find(p => !p.sameTab && Number(presenceOf(p).v) !== APP_BUILD);
+    if (old && !S.warnedVer){ S.warnedVer = true; toast('相手が古い版を開いています。相手にページを読み込み直してもらってください'); }
+  }
+  // マッチング直後に相手が抜けたら、もう一度探す
+  if (S.mode === 'online' && S.justMatched && S.phase === 'lobby' && members().length < 2){
+    if (!S.lonelyT) S.lonelyT = setTimeout(() => {
+      S.lonelyT = null;
+      if (S.mode === 'online' && S.justMatched && S.phase === 'lobby' && members().length < 2) rematchSearch();
+    }, 4000);
+  } else if (S.lonelyT){ clearTimeout(S.lonelyT); S.lonelyT = null; }
   if (S.mode === 'online' && S.justMatched && isHost() && S.phase === 'lobby' && members().length >= 2 && !S.autoStartT){
     S.autoStartT = setTimeout(() => { S.autoStartT = null; if (S.phase === 'lobby' && members().length >= 2 && isHost()) hostStart(); }, 1800);
   }
@@ -1663,7 +1676,7 @@ function startMatch(cfg){
   S.puzzle = g.puzzle; S.solution = g.solution;
   S.vals = g.puzzle.slice(); S.notes = new Array(81).fill(0);
   S.miss = 0; S.finishT = 0; S.memo = false; S.sel = 40; S.announced = new Set(); S.moves = [];
-  S.justMatched = false; S.rateDelta = 0;
+  S.justMatched = false; S.rateDelta = 0; clearTimeout(S.lonelyT); S.lonelyT = null;
   S.recorded = false; S.res = null; S.prevBest = Number(loadStats().best[cfg.d]) || 0; S.scoreSent = false; S.gaveUp = false;
   // カウントダウンは対戦のときだけ（ひとりで練習・ステージはすぐ始まる）
   const withCountdown = !S.solo;
@@ -2171,6 +2184,14 @@ function setSearching(on){
       if (sec >= 10) $('#bot-now-wrap').hidden = false;
     }, 500);
   }
+}
+async function rematchSearch(){
+  toast('相手が抜けたので、もう一度探します');
+  S.justMatched = false;
+  if (S.named){ try { await S.named.leave(); } catch(e){} S.named = null; }
+  S.peers = []; S.phase = 'home';
+  renderOnlineDiffs(); show('scr-online');
+  findMatch();
 }
 async function findMatch(tries = 0){
   $('#online-err').textContent = '';
