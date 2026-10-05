@@ -657,7 +657,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
       </div>
       <p class="err" id="home-err" role="alert"></p>
       <p class="note" id="room-note" style="margin:6px 4px 0"></p>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-1</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-2</span></nav>
     </div>
   </section>
 
@@ -859,7 +859,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
           </div>
         </div>
       </div>
-      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-1</span></nav>
+      <nav class="legal" aria-label="サイト情報"><a href="terms.html">利用規約</a><a href="privacy.html">プライバシーポリシー</a><a href="privacy.html#contact">お問い合わせ</a><span class="ver">Ver 2026.10.01-2</span></nav>
     </div>
   </section>
 
@@ -994,8 +994,8 @@ const FIREBASE_CONFIG = {
 /* ▼ App Check（あなたのサイト以外からの書き込みを防ぐ）
    Google Cloud の reCAPTCHA で作った「サイトキー」を貼り付けてください。空のままなら使いません。 */
 const APP_CHECK_SITE_KEY = "";
-const APP_VERSION = "2026.10.01-1";
-const APP_BUILD = 5;   // 対戦相手と版が違うかを見分ける番号（更新のたびに増やす）
+const APP_VERSION = "2026.10.01-2";
+const APP_BUILD = 6;   // 対戦相手と版が違うかを見分ける番号（更新のたびに増やす）
 /* ▼ 機能のオン・オフ（あとで公開するときは true にするだけ） */
 const FEATURES = {
   stages: false,    // ひとりで進めるステージモード（200ステージ）
@@ -1594,7 +1594,7 @@ function onRoomUpdate(){
     if (me && Number(presenceOf(me).fin) > 0){ S.scoreSent = true; submitScore(); }
   }
   if (S.phase === 'lobby') renderLobby();
-  if (S.phase === 'play' || S.phase === 'done' || S.phase === 'count') { renderPlayers(); checkOthersFinish(); }
+  if (S.phase === 'play' || S.phase === 'done' || S.phase === 'count') { renderPlayers(); checkOthersFinish(); checkForfeit(); }
   if (S.phase === 'done') renderResult();
 }
 
@@ -1677,7 +1677,7 @@ function startMatch(cfg){
   S.vals = g.puzzle.slice(); S.notes = new Array(81).fill(0);
   S.miss = 0; S.finishT = 0; S.memo = false; S.sel = 40; S.announced = new Set(); S.moves = [];
   S.justMatched = false; S.rateDelta = 0; clearTimeout(S.lonelyT); S.lonelyT = null;
-  S.recorded = false; S.res = null; S.prevBest = Number(loadStats().best[cfg.d]) || 0; S.scoreSent = false; S.gaveUp = false;
+  S.recorded = false; S.res = null; S.prevBest = Number(loadStats().best[cfg.d]) || 0; S.scoreSent = false; S.gaveUp = false; S.hadOpp = false; S.forfeitWin = false;
   // カウントダウンは対戦のときだけ（ひとりで練習・ステージはすぐ始まる）
   const withCountdown = !S.solo;
   S.startAt = (withCountdown && cfg.startAt > 0) ? cfg.startAt : Math.round(serverNow() + (withCountdown ? 5700 : 0)); cfg.startAt = S.startAt;
@@ -1990,6 +1990,26 @@ function renderRace(){
     box.appendChild(row);
   });
 }
+// 相手が全員ギブアップ（または退出）したら、残った人を勝ちにする
+function checkForfeit(){
+  if (S.solo || !S.named || S.mode === 'bot') return;
+  const others = roundPeers().filter(p => !p.sameTab);
+  if (others.length) S.hadOpp = true;
+  if (S.phase !== 'play' || !S.hadOpp) return;
+  const stillPlaying = others.filter(p => presenceOf(p).st !== 'done');
+  const finished = others.filter(p => presenceOf(p).st === 'done' && tOf(presenceOf(p)) > 0);
+  if (stillPlaying.length || finished.length) return;
+  // ここまで来たら、自分以外は全員ギブアップか退出
+  S.forfeitWin = true; S.gaveUp = false; S.newBest = false;
+  S.forfeitWhy = others.length ? 'ギブアップ' : '退出';
+  S.finishT = Math.max(1, serverNow() - S.startAt + S.miss*PENALTY);
+  S.phase = 'done';
+  clearInterval(S.timerI); $('#timer').textContent = fmt(S.finishT); $('#lead').hidden = true;
+  if (S.named) S.named.presence({ fin: TS(), miss: S.miss }).catch(()=>{});
+  pushPresence(); saveSession();
+  toast(`🏳️ 相手が${S.forfeitWhy}したので、あなたの勝ちです`);
+  showResult();
+}
 function checkOthersFinish(){
   if (S.solo) return;
   roundPeers().forEach(p => {
@@ -2058,6 +2078,7 @@ function renderResult(){
 
   let emoji, title;
   if (S.gaveUp){ emoji = '🏳️'; title = 'ギブアップ'; }
+  else if (S.forfeitWin){ emoji = '🏆'; title = 'YOU WIN!'; }
   else if (!multi){ emoji = '🎉'; title = 'クリア！'; }
   else if (myRank === 1){ emoji = '🏆'; title = final ? 'YOU WIN!' : '1位でクリア！'; }
   else { emoji = myRank === 2 ? '🥈' : '🥉'; title = `${myRank}位でクリア`; }
@@ -2082,8 +2103,9 @@ function renderResult(){
 
   const badges = $('#res-badges'); badges.innerHTML = '';
   const addBadge = t => { const b = document.createElement('span'); b.textContent = t; badges.appendChild(b); };
-  if (mine && S.newBest) addBadge(S.prevBest ? `🎉 自己ベスト更新！（${((S.prevBest - mine)/1000).toFixed(1)}秒短縮）` : '🎉 初記録！');
-  else if (mine && S.prevBest) addBadge(`⚡ 自己ベストまであと${((mine - S.prevBest)/1000).toFixed(1)}秒`);
+  if (S.forfeitWin) addBadge(`🏳️ 相手が${S.forfeitWhy || 'ギブアップ'}しました（不戦勝）`);
+  if (mine && S.newBest && !S.forfeitWin) addBadge(S.prevBest ? `🎉 自己ベスト更新！（${((S.prevBest - mine)/1000).toFixed(1)}秒短縮）` : '🎉 初記録！');
+  else if (mine && S.prevBest && !S.forfeitWin) addBadge(`⚡ 自己ベストまであと${((mine - S.prevBest)/1000).toFixed(1)}秒`);
   if (multi && final && S.won && S.mode !== 'bot' && st.streak >= 2) addBadge(`🔥 ${st.streak}連勝！`);
   if (multi && final && S.mode === 'bot' && S.won) addBadge('🤖 ロボットに勝利！');
   if (mine && S.miss === 0) addBadge('✨ ノーミス');
