@@ -38,18 +38,13 @@ export const CountUp: React.FC<{ start: number; to: number; duration?: number; d
 export const Background: React.FC = () => {
   const frame = useCurrentFrame();
   return (
-    <AbsoluteFill style={{ background: `linear-gradient(160deg, ${colors.bg1} 0%, ${colors.bg2} 100%)` }}>
+    <AbsoluteFill style={{ backgroundColor: colors.bg }}>
       <AbsoluteFill
         style={{
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.05) 2px, transparent 2px)",
           backgroundSize: "90px 90px",
           backgroundPosition: `0px ${(frame * 1.5) % 90}px`,
-        }}
-      />
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(circle at 50% 42%, rgba(0,224,255,0.18) 0%, transparent 55%)`,
         }}
       />
     </AbsoluteFill>

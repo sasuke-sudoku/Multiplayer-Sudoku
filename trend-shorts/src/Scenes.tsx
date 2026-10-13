@@ -75,7 +75,7 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
                 width: 150,
                 height: 150,
                 borderRadius: "50%",
-                background: `linear-gradient(135deg, ${colors.accent2}, #5b5bff)`,
+                background: colors.accent2,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

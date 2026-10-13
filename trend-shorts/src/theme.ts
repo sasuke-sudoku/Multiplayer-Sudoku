@@ -12,8 +12,7 @@ export const HEIGHT = 1920;
 export const OUTRO_TAIL = 1.5 * FPS;
 
 export const colors = {
-  bg1: "#0b1026",
-  bg2: "#1b0f3b",
+  bg: "#111111",
   accent: "#ffd400",
   accent2: "#00e0ff",
   danger: "#ff3b5c",
