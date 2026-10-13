@@ -21,6 +21,13 @@ export const colors = {
   muted: "#3a404d",
   card: "#f1f3f7",
   cardBorder: "#c4cad6",
+  // Tinted card fills so the contents stand apart from the white background.
+  blueFill: "#eef3ff",
+  blueBorder: "#9db7f5",
+  blueLabel: "#1d3b80",
+  redFill: "#fff0f2",
+  redBorder: "#f2a1af",
+  redLabel: "#9b1c33",
 };
 
 export type Line = {

@@ -144,11 +144,15 @@ export const Caption: React.FC<{ line: TimedLine }> = ({ line }) => {
   );
 };
 
-export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
+export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProperties; tone?: "blue" | "red" }> = ({
+  children,
+  style,
+  tone = "blue",
+}) => (
   <div
     style={{
-      background: colors.card,
-      border: `3px solid ${colors.cardBorder}`,
+      background: tone === "red" ? colors.redFill : colors.blueFill,
+      border: `3px solid ${tone === "red" ? colors.redBorder : colors.blueBorder}`,
       boxShadow: "0 8px 20px rgba(17,17,17,0.08)",
       borderRadius: 36,
       padding: "28px 40px",
@@ -159,4 +163,25 @@ export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProper
   >
     {children}
   </div>
+);
+
+// Small solid label used inside cards.
+export const Tag: React.FC<{ children: React.ReactNode; tone?: "blue" | "red"; style?: React.CSSProperties }> = ({
+  children,
+  tone = "blue",
+  style,
+}) => (
+  <span
+    style={{
+      display: "inline-block",
+      background: tone === "red" ? colors.danger : colors.accent,
+      color: "#fff",
+      fontWeight: 900,
+      borderRadius: 12,
+      padding: "4px 16px",
+      ...style,
+    }}
+  >
+    {children}
+  </span>
 );

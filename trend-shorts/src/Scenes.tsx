@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { Card, CountUp, Pop, usePop } from "./parts";
+import { Card, CountUp, Pop, Tag, usePop } from "./parts";
 import { colors, images, SceneTiming } from "./theme";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -32,8 +32,18 @@ const Stat: React.FC<{ start: number; label: string; children: React.ReactNode; 
   color = colors.accent,
 }) => (
   <Pop start={start} style={{ width: "100%" }}>
-    <Card style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontSize: 52, fontWeight: 700, color: colors.muted }}>{label}</span>
+    <Card
+      tone={color === colors.danger ? "red" : "blue"}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderLeft: `16px solid ${color === colors.danger ? colors.danger : colors.accent}`,
+      }}
+    >
+      <span style={{ fontSize: 52, fontWeight: 900, color: color === colors.danger ? colors.redLabel : colors.blueLabel }}>
+        {label}
+      </span>
       <span style={{ fontSize: 104, fontWeight: 900, color, lineHeight: 1.1 }}>{children}</span>
     </Card>
   </Pop>
@@ -58,7 +68,7 @@ const Hook: React.FC<{ s: SceneTiming }> = ({ s }) => (
 
 const ProfileRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div style={{ display: "flex", gap: 20, fontSize: 44, lineHeight: 1.45 }}>
-    <span style={{ color: colors.muted, fontWeight: 700, width: 110, flexShrink: 0 }}>{label}</span>
+    <Tag style={{ fontSize: 34, width: 110, textAlign: "center", flexShrink: 0, alignSelf: "center" }}>{label}</Tag>
     <span style={{ color: colors.text, fontWeight: 900 }}>{value}</span>
   </div>
 );
@@ -105,8 +115,8 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
       <div style={{ display: "flex", gap: 24 }}>
         {["AIソフト①", "AIソフト②", "AIソフト③"].map((name, i) => (
           <Pop key={name} start={t + 6 + i * 8}>
-            <Card style={{ padding: "16px 26px", textAlign: "center" }}>
-              <div style={{ fontSize: 40, fontWeight: 700, color: colors.muted }}>{name}</div>
+            <Card tone="red" style={{ padding: "16px 26px", textAlign: "center" }}>
+              <div style={{ fontSize: 40, fontWeight: 900, color: colors.redLabel }}>{name}</div>
               <div style={{ fontSize: 72, fontWeight: 900, color: colors.danger, lineHeight: 1 }}>✕</div>
             </Card>
           </Pop>
@@ -197,7 +207,7 @@ const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
       </div>
       <Pop start={12} style={{ width: "100%" }}>
         <Card style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 46, fontWeight: 700, color: colors.muted }}>約半年で 企業評価額（※売上ではない）</div>
+          <div style={{ fontSize: 46, fontWeight: 900, color: colors.blueLabel }}>約半年で 企業評価額（※売上ではない）</div>
           <div style={{ fontSize: 120, fontWeight: 900, color: colors.accent, lineHeight: 1.1 }}>
             約<CountUp start={12} to={375} duration={30} />億円
           </div>
@@ -206,13 +216,13 @@ const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
       <div style={{ display: "flex", gap: 24, width: "100%" }}>
         <Pop start={t + 6} style={{ flex: 1 }}>
           <Card style={{ textAlign: "center", padding: "22px 10px" }}>
-            <div style={{ fontSize: 44, color: colors.muted, fontWeight: 700 }}>有料顧客</div>
+            <Tag style={{ fontSize: 38 }}>有料顧客</Tag>
             <div style={{ fontSize: 76, fontWeight: 900 }}>1万人</div>
           </Card>
         </Pop>
         <Pop start={t + 40} style={{ flex: 1 }}>
-          <Card style={{ textAlign: "center", padding: "22px 10px" }}>
-            <div style={{ fontSize: 44, color: colors.muted, fontWeight: 700 }}>今年の売上見込み</div>
+          <Card tone="red" style={{ textAlign: "center", padding: "22px 10px" }}>
+            <Tag tone="red" style={{ fontSize: 38 }}>今年の売上見込み</Tag>
             <div style={{ fontSize: 76, fontWeight: 900, color: colors.danger }}>約15億円</div>
           </Card>
         </Pop>
@@ -232,7 +242,7 @@ const How: React.FC<{ s: SceneTiming }> = ({ s }) => {
           <Pop key={task} start={4 + i * 22}>
             <Card style={{ fontSize: 50, fontWeight: 900, textAlign: "center", padding: "30px 10px" }}>
               {task}
-              <div style={{ fontSize: 40, color: colors.accent2, marginTop: 8 }}>→ AI ✔</div>
+              <Tag style={{ fontSize: 38, marginTop: 12 }}>AIが担当 ✔</Tag>
             </Card>
           </Pop>
         ))}
@@ -267,8 +277,8 @@ const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
         <div style={{ fontSize: 60, fontWeight: 900, color: colors.danger }}>⚠️ でも、光と影</div>
       </Pop>
       <div style={{ translate: `${shake}px 0px`, width: "100%" }}>
-        <Card style={{ textAlign: "center", borderColor: colors.danger, background: "#fff0f2" }}>
-          <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted }}>AI利用料がかさみ…（本人談）</div>
+        <Card tone="red" style={{ textAlign: "center", borderColor: colors.danger }}>
+          <div style={{ fontSize: 48, fontWeight: 900, color: colors.redLabel }}>AI利用料がかさみ…（本人談）</div>
           <div style={{ fontSize: 112, fontWeight: 900, color: colors.danger, lineHeight: 1.1 }}>一部顧客で赤字</div>
         </Card>
       </div>
@@ -276,7 +286,7 @@ const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
         <div style={{ fontSize: 70, color: colors.accent }}>↓</div>
       </Pop>
       <Pop start={t + 10} style={{ width: "100%" }}>
-        <Card style={{ textAlign: "center", borderColor: colors.accent2 }}>
+        <Card style={{ textAlign: "center", borderColor: colors.accent }}>
           <div style={{ fontSize: 60, fontWeight: 900 }}>
             <span style={{ color: colors.accent2 }}>無料</span>のオープンソースAIへ
           </div>
