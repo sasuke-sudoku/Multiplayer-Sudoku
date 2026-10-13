@@ -1,9 +1,11 @@
 """Generate narration wavs with VOICEVOX CORE and write src/timeline.json.
 
+Usage: python3 script/tts.py [episode.json]   (default: episodes/polsia.json)
+
 VOICEVOX_DIR must contain the *.vvm voice models and the voicevox_onnxruntime
 folder (see README). The Open JTalk dictionary bundled with pyopenjtalk-plus is reused.
 """
-import io, json, os, pathlib, wave
+import io, json, os, pathlib, sys, wave
 import pyopenjtalk
 from voicevox_core.blocking import Onnxruntime, OpenJtalk, Synthesizer, VoiceModelFile
 
@@ -11,7 +13,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 VV = pathlib.Path(os.environ.get("VOICEVOX_DIR", ROOT / "voicevox"))
 GAP = 0.12  # seconds of silence after each line
 
-script = json.loads((ROOT / "script/script.json").read_text())
+src = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "episodes/polsia.json"
+script = json.loads(src.read_text())
 voice = script["voice"]
 ort = Onnxruntime.load_once(filename=str(next(VV.glob("voicevox_onnxruntime-*/lib/libvoicevox_onnxruntime.so.*.*"))))
 synth = Synthesizer(ort, OpenJtalk(os.path.join(os.path.dirname(pyopenjtalk.__file__), "dictionary")))
@@ -20,6 +23,8 @@ with VoiceModelFile.open(VV / f"{voice['vvm']}.vvm") as model:
 
 out = ROOT / "public/voice"
 out.mkdir(parents=True, exist_ok=True)
+for old in out.glob("*.wav"):
+    old.unlink()
 lines = []
 for i, line in enumerate(script["lines"]):
     query = synth.create_audio_query(line["reading"], voice["styleId"])

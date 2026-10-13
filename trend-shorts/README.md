@@ -1,47 +1,42 @@
 # trend-shorts
 
-話題の企業・人物を紹介する、1080×1920・約55秒のYouTube Shortsです（Remotion製）。
-ナレーションは VOICEVOX（青山龍星）です。
+話題の企業・人物を紹介する、1080×1920・約55秒のYouTube Shortsを作るRemotionプロジェクトです。
+ナレーションは VOICEVOX（青山龍星）。1本の動画は `episodes/<slug>.json` 1ファイルで決まります。
 
-## 構成
+- 作り方の手順（Claude Code のスキル）: `../.claude/skills/company-shorts/SKILL.md`
+- 別のプロンプトで新しい回を作るときの文面: `PROMPT.md`
+- 見本の回: `episodes/polsia.json`
 
-- `script/script.json` … 台本と声の設定（`voice` = VOICEVOXの話者、`text` = 字幕、`reading` = ナレーションの読み方、`highlight` = 黄色で強調する語）
-- `script/tts.py` … 台本から VOICEVOX CORE でナレーションを作り、`public/voice/*.wav` と `src/timeline.json` を出力
-- `src/Scenes.tsx` … シーンごとの映像（hook / who / launch / growth / how / shadow / outro）
-- `src/parts.tsx` … 背景・ヘッダー・字幕・出典表記などの共通パーツ
-
-## 実際の画像を使う
-
-`public/images/` に画像を置き、`script/script.json` の `images` にパスを書いて `python3 script/tts.py` を実行します（空欄のときはアイコンや文字で代わりに表示します）。
-
-- `founder` … 創業者の顔写真（正方形推奨。丸く切り抜いて表示）
-- `logo` … 会社ロゴ（透過PNG推奨）
-- `site` … サービスのWebサイトのスクリーンショット（横長。上側を表示）
-
-例：`"images": { "founder": "images/ben.jpg", "logo": "images/polsia-logo.png", "site": "images/polsia-site.png" }`
-
-## 手順
-
-### VOICEVOX の準備（初回のみ）
-
-`voicevox/` フォルダ（git管理外）に次の3つを置きます。
-
-- [VOICEVOX CORE](https://github.com/VOICEVOX/voicevox_core/releases) 0.16.4 の Python wheel（`voicevox_core-0.16.4-cp310-abi3-manylinux_2_34_x86_64.whl`）→ `pip install` する
-- [onnxruntime](https://github.com/VOICEVOX/onnxruntime-builder/releases) の `voicevox_onnxruntime-linux-x64-1.17.3.tgz` → 展開する
-- [音声モデル](https://github.com/VOICEVOX/voicevox_vvm/releases) の `.vvm`（青山龍星は `15.vvm`、冥鳴ひまりは `1.vvm`）
-
-声を変えるときは `script/script.json` の `voice`（`vvm` と `styleId`）を書き換えます。
-**動画の概要欄には「VOICEVOX:話者名」のクレジットを必ず書いてください**（利用規約で決められています）。
-
-### 作成
+## クイックスタート
 
 ```bash
-pip install pyopenjtalk-plus
-python3 script/tts.py          # 台本を直したら音声とタイミングを作り直す
-npm i
-npx remotion studio            # プレビュー
-npx remotion render TrendShort out/trend-short.mp4
+bash scripts/setup.sh                        # 初回のみ：npm・VOICEVOX（core / onnxruntime / 声）
+bash scripts/build.sh episodes/polsia.json   # ナレーション → 動画 → チェック画像 → 概要欄テキスト
+npx remotion studio                          # 最後にビルドした回をプレビュー
 ```
 
-動画の長さはナレーションの長さに合わせて自動で決まります。
-新しい回を作るときは `script/script.json` を書き換え、`src/Scenes.tsx` で各 `scene` の映像を編集してください。
+出力は `out/` に入ります（`<slug>.mp4`、`<slug>-check.png`、`<slug>-description.txt`）。
+
+## エピソードJSON
+
+| キー | 内容 |
+|---|---|
+| `series` | 左上の赤いラベル |
+| `title` | 上部のタイトル。「？」の前が1行目、後ろが青字の2行目 |
+| `description` | 概要欄の本文（出典・注意書き）。VOICEVOXクレジットは自動で付く |
+| `voice` | VOICEVOXの話者（`name` / `vvm` / `styleId` / `speed`） |
+| `images` | `founder`・`logo`・`site` の画像パス（`public/` からの相対。空欄なら代わりの表示） |
+| `visuals` | 各シーンの画面上の文字（カード・数値・ラベル）。数値はカウントアップする |
+| `lines` | ナレーション14行。`scene`・`text`（字幕、`\n` で改行）・`reading`（読み上げ文）・`highlight`（黄色マーカー） |
+
+シーンは `hook → who → launch → growth → how → shadow → outro` の7つで、各2行です。
+
+## ファイル構成
+
+- `scripts/setup.sh` / `scripts/build.sh` … 準備とビルド
+- `script/tts.py` … VOICEVOXでナレーションを作り `src/timeline.json` を出力
+- `script/contact_sheet.py` … チェック用の静止画一覧を作る
+- `src/Scenes.tsx` … シーンごとの映像（`visuals` を表示）
+- `src/parts.tsx` / `src/theme.ts` … 共通パーツ・配色・タイミング計算
+
+VOICEVOXの音声を使った動画は、概要欄に「VOICEVOX:話者名」のクレジットが必要です。

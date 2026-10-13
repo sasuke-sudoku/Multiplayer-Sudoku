@@ -74,9 +74,20 @@ export const scenes: SceneTiming[] = (() => {
 })();
 
 export const title: string = timeline.title;
-export const source: string = timeline.source;
 export const series: string = timeline.series;
-export const voiceCredit = `VOICEVOX:${timeline.voice.name}`;
 
 // Optional photos in public/ (paths relative to public/). Empty string = use the built-in fallback.
 export const images: { founder: string; logo: string; site: string } = timeline.images;
+
+type Item = { label: string; value: string; tone?: "blue" | "red" };
+// On-screen text for each scene (everything that is not a caption). See README for the schema.
+export type Visuals = {
+  hook: { stats: Item[]; tagline: string };
+  who: { name: string; emoji: string; rows: { label: string; value: string }[]; chips: string[]; chipMark: string };
+  launch: { date: string; name: string; flow: string[]; pill: string };
+  growth: { main: Item; cards: Item[] };
+  how: { tasks: string[]; taskTag: string; stamp: string };
+  shadow: { header: string; warnLabel: string; warn: string; after: string; afterHighlight: string };
+  outro: { question: string[]; questionHighlight: string; comment: string };
+};
+export const visuals = timeline.visuals as Visuals;

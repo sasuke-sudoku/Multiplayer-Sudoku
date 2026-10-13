@@ -1,7 +1,7 @@
 {
   "series": "🏢 注目の企業・人物",
   "title": "社員ゼロで売上15億円見込み？AIに会社を回させた40歳",
-  "source": "出典：WSJ（2026/7/29）ほか報道・本人発信｜数字は本人発表値｜1ドル=150円換算",
+  "description": "社員ゼロで売上15億円見込み？AIに会社を回させた40歳、ベン・ブロカ氏と「Polsia」を紹介します。\n\n■ 数字について\n売上・顧客数などは本人・会社の発表に基づく報道の数字で、第三者による確認はしていません。\n「売上15億円」は2026年の売上見込み、「約375億円」は売上ではなく企業評価額です。円換算は1ドル＝150円です。\n\n■ 主な出典\n・The Wall Street Journal「The Rise of Million-Dollar Companies With Just One Employee」（2026年7月29日）\n・Yahoo Finance / Moneywise ほか関連報道\n・Ben Broca 氏の公開発信\n\n#AI #起業 #ショート",
   "voice": {
     "name": "青山龍星",
     "vvm": 15,
@@ -12,6 +12,101 @@
     "founder": "",
     "logo": "",
     "site": ""
+  },
+  "visuals": {
+    "hook": {
+      "stats": [
+        {
+          "label": "社員",
+          "value": "0人"
+        },
+        {
+          "label": "顧客",
+          "value": "1万人"
+        },
+        {
+          "label": "売上（見込み）",
+          "value": "15億円",
+          "tone": "red"
+        }
+      ],
+      "tagline": "たった1人のAI会社"
+    },
+    "who": {
+      "name": "Ben Broca",
+      "emoji": "👨‍💻",
+      "rows": [
+        {
+          "label": "年齢",
+          "value": "40歳"
+        },
+        {
+          "label": "会社",
+          "value": "Polsia（創業者）"
+        },
+        {
+          "label": "経歴",
+          "value": "CloudKitchens／Hutch共同創業"
+        }
+      ],
+      "chips": [
+        "AIソフト①",
+        "AIソフト②",
+        "AIソフト③"
+      ],
+      "chipMark": "✕"
+    },
+    "launch": {
+      "date": "2025.12 公開",
+      "name": "Polsia",
+      "flow": [
+        "立ち上げ",
+        "運営"
+      ],
+      "pill": "🤖 AIがまるごと代行"
+    },
+    "growth": {
+      "main": {
+        "label": "約半年で 企業評価額（※売上ではない）",
+        "value": "約375億円"
+      },
+      "cards": [
+        {
+          "label": "有料顧客",
+          "value": "1万人"
+        },
+        {
+          "label": "今年の売上見込み",
+          "value": "約15億円",
+          "tone": "red"
+        }
+      ]
+    },
+    "how": {
+      "tasks": [
+        "📧 メール返信",
+        "💻 コード修正",
+        "💬 問い合わせ",
+        "💸 返金処理"
+      ],
+      "taskTag": "AIが担当 ✔",
+      "stamp": "社員は1人だけ"
+    },
+    "shadow": {
+      "header": "⚠️ でも、光と影",
+      "warnLabel": "AI利用料がかさみ…（本人談）",
+      "warn": "一部顧客で赤字",
+      "after": "無料のオープンソースAIへ",
+      "afterHighlight": "無料"
+    },
+    "outro": {
+      "question": [
+        "あなたなら",
+        "AIに何を任せる？"
+      ],
+      "questionHighlight": "何を任せる？",
+      "comment": "👇 コメントで教えてね"
+    }
   },
   "lines": [
     {
