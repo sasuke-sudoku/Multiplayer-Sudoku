@@ -12,14 +12,15 @@ export const HEIGHT = 1920;
 export const OUTRO_TAIL = 1.5 * FPS;
 
 export const colors = {
-  bg: "#111111",
-  accent: "#ffd400",
-  accent2: "#00e0ff",
-  danger: "#ff3b5c",
-  text: "#ffffff",
-  muted: "#a9b3d6",
-  card: "rgba(255,255,255,0.08)",
-  cardBorder: "rgba(255,255,255,0.18)",
+  bg: "#ffffff",
+  accent: "#0a5cff",
+  accent2: "#0a5cff",
+  highlight: "#ffd400",
+  danger: "#e8173b",
+  text: "#111111",
+  muted: "#5b6170",
+  card: "#f3f4f6",
+  cardBorder: "#e3e5ea",
 };
 
 export type Line = {
@@ -69,3 +70,6 @@ export const title: string = timeline.title;
 export const source: string = timeline.source;
 export const series: string = timeline.series;
 export const voiceCredit = `VOICEVOX:${timeline.voice.name}`;
+
+// Optional photos in public/ (paths relative to public/). Empty string = use the built-in fallback.
+export const images: { founder: string; logo: string; site: string } = timeline.images;

@@ -150,5 +150,10 @@
       "file": "voice/13.wav",
       "seconds": 3.885
     }
-  ]
+  ],
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  }
 }

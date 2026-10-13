@@ -8,6 +8,11 @@
     "styleId": 13,
     "speed": 1.15
   },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
   "lines": [
     {
       "scene": "hook",

@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { colors, fontFamily, series, source, title, TimedLine, voiceCredit } from "./theme";
+import { colors, fontFamily, series, title, TimedLine } from "./theme";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -42,7 +42,7 @@ export const Background: React.FC = () => {
       <AbsoluteFill
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.05) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.05) 2px, transparent 2px)",
+            "linear-gradient(rgba(0,0,0,0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,0.04) 2px, transparent 2px)",
           backgroundSize: "90px 90px",
           backgroundPosition: `0px ${(frame * 1.5) % 90}px`,
         }}
@@ -88,7 +88,6 @@ export const Header: React.FC = () => {
           fontWeight: 900,
           textAlign: "center",
           lineHeight: 1.25,
-          textShadow: "0 6px 0 rgba(0,0,0,0.5)",
         }}
       >
         {title.split("？")[0]}？
@@ -104,7 +103,7 @@ const renderHighlighted = (text: string, highlight: string[]) => {
   const pattern = new RegExp(`(${highlight.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`);
   return text.split(pattern).map((part, i) =>
     highlight.includes(part) ? (
-      <span key={i} style={{ color: colors.accent }}>
+      <span key={i} style={{ background: colors.highlight, padding: "0 8px", borderRadius: 8 }}>
         {part}
       </span>
     ) : (
@@ -120,7 +119,7 @@ export const Caption: React.FC<{ line: TimedLine }> = ({ line }) => {
     <div
       style={{
         position: "absolute",
-        top: 1230,
+        top: 1290,
         left: 70,
         right: 70,
         display: "flex",
@@ -131,13 +130,11 @@ export const Caption: React.FC<{ line: TimedLine }> = ({ line }) => {
     >
       <div
         style={{
-          color: "white",
+          color: colors.text,
           fontSize: 58,
           fontWeight: 900,
           lineHeight: 1.35,
           textAlign: "center",
-          WebkitTextStroke: "14px #000",
-          paintOrder: "stroke fill",
           whiteSpace: "pre-line",
         }}
       >
@@ -146,25 +143,6 @@ export const Caption: React.FC<{ line: TimedLine }> = ({ line }) => {
     </div>
   );
 };
-
-export const SourceNote: React.FC = () => (
-  <div
-    style={{
-      position: "absolute",
-      top: 1560,
-      left: 80,
-      right: 80,
-      textAlign: "center",
-      color: colors.muted,
-      fontSize: 26,
-      fontWeight: 700,
-    }}
-  >
-    {source}
-    <br />
-    {voiceCredit}
-  </div>
-);
 
 export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
   <div

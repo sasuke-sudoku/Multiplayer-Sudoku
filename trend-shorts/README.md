@@ -10,6 +10,16 @@
 - `src/Scenes.tsx` … シーンごとの映像（hook / who / launch / growth / how / shadow / outro）
 - `src/parts.tsx` … 背景・ヘッダー・字幕・出典表記などの共通パーツ
 
+## 実際の画像を使う
+
+`public/images/` に画像を置き、`script/script.json` の `images` にパスを書いて `python3 script/tts.py` を実行します（空欄のときはアイコンや文字で代わりに表示します）。
+
+- `founder` … 創業者の顔写真（正方形推奨。丸く切り抜いて表示）
+- `logo` … 会社ロゴ（透過PNG推奨）
+- `site` … サービスのWebサイトのスクリーンショット（横長。上側を表示）
+
+例：`"images": { "founder": "images/ben.jpg", "logo": "images/polsia-logo.png", "site": "images/polsia-site.png" }`
+
 ## 手順
 
 ### VOICEVOX の準備（初回のみ）

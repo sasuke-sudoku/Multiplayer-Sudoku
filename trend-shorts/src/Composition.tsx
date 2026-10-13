@@ -1,7 +1,7 @@
 import { Audio } from "@remotion/media";
 import { useEffect, useState } from "react";
 import { AbsoluteFill, Composition, continueRender, delayRender, Sequence, staticFile } from "remotion";
-import { Background, Caption, Header, SourceNote } from "./parts";
+import { Background, Caption, Header } from "./parts";
 import { sceneComponents } from "./Scenes";
 import { FPS, fontFamily, HEIGHT, lines, scenes, totalFrames, WIDTH } from "./theme";
 
@@ -45,7 +45,6 @@ export const TrendShort: React.FC = () => {
           <Caption line={line} />
         </Sequence>
       ))}
-      <SourceNote />
     </AbsoluteFill>
   );
 };

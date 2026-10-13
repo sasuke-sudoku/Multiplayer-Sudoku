@@ -1,7 +1,7 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Card, CountUp, Pop, usePop } from "./parts";
-import { colors, SceneTiming } from "./theme";
+import { colors, images, SceneTiming } from "./theme";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -83,7 +83,14 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
                 flexShrink: 0,
               }}
             >
-              👨‍💻
+              {images.founder ? (
+                <Img
+                  src={staticFile(images.founder)}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+                />
+              ) : (
+                "👨‍💻"
+              )}
             </div>
             <div>
               <div style={{ fontSize: 34, fontWeight: 700, color: colors.accent }}>PROFILE</div>
@@ -111,25 +118,35 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
 
 const Launch: React.FC<{ s: SceneTiming }> = ({ s }) => {
   const t = s.lines[1].from;
-  const frame = useCurrentFrame();
   return (
     <Stage>
       <Pop start={4}>
         <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted, textAlign: "center" }}>2025.12 公開</div>
       </Pop>
       <Pop start={14}>
-        <div
-          style={{
-            fontSize: 170,
-            fontWeight: 900,
-            color: colors.text,
-            letterSpacing: 4,
-            textShadow: `0 0 ${30 + 10 * Math.sin(frame / 6)}px ${colors.accent2}`,
-          }}
-        >
-          Polsia
-        </div>
+        {images.logo ? (
+          <Img src={staticFile(images.logo)} style={{ height: images.site ? 90 : 180, objectFit: "contain" }} />
+        ) : (
+          <div style={{ fontSize: images.site ? 100 : 170, fontWeight: 900, color: colors.text, letterSpacing: 4 }}>
+            Polsia
+          </div>
+        )}
       </Pop>
+      {images.site ? (
+        <Pop start={20}>
+          <Img
+            src={staticFile(images.site)}
+            style={{
+              width: 880,
+              height: 240,
+              objectFit: "cover",
+              objectPosition: "top",
+              borderRadius: 24,
+              border: `3px solid ${colors.cardBorder}`,
+            }}
+          />
+        </Pop>
+      ) : null}
       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
         <Pop start={t + 4}>
           <Card style={{ fontSize: 52, fontWeight: 900 }}>立ち上げ</Card>
@@ -145,7 +162,7 @@ const Launch: React.FC<{ s: SceneTiming }> = ({ s }) => {
         <div
           style={{
             background: colors.accent,
-            color: "#000",
+            color: "#fff",
             fontSize: 56,
             fontWeight: 900,
             padding: "12px 40px",
@@ -250,7 +267,7 @@ const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
         <div style={{ fontSize: 60, fontWeight: 900, color: colors.danger }}>⚠️ でも、光と影</div>
       </Pop>
       <div style={{ translate: `${shake}px 0px`, width: "100%" }}>
-        <Card style={{ textAlign: "center", borderColor: colors.danger, background: "rgba(255,59,92,0.15)" }}>
+        <Card style={{ textAlign: "center", borderColor: colors.danger, background: "#fff0f2" }}>
           <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted }}>AI利用料がかさみ…（本人談）</div>
           <div style={{ fontSize: 112, fontWeight: 900, color: colors.danger, lineHeight: 1.1 }}>一部顧客で赤字</div>
         </Card>
@@ -297,7 +314,7 @@ const Outro: React.FC<{ s: SceneTiming }> = ({ s }) => {
             padding: "22px 60px",
             borderRadius: 999,
             scale: pressed ? "0.9" : "1",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
           }}
         >
           {subscribed ? "✔ 登録済み" : "チャンネル登録"}
