@@ -64,7 +64,6 @@ CHORDS = {
 }
 
 # 各小節: [(コード, 拍数), ...]
-INTRO = [[("F", 4)], [("C/E", 4)], [("Dm7", 2), ("Abmaj7", 2)], [("G7sus", 2), ("G7", 2)]]
 A = [[("F", 4)], [("C/E", 4)], [("Dm7", 4)], [("C", 4)],
      [("F", 4)], [("Fm", 4)], [("C/E", 2), ("Am7", 2)], [("Dm7", 2), ("G7", 2)]]
 A2 = [[("F", 4)], [("C/E", 4)], [("Dm7", 4)], [("G7sus", 2), ("G7", 2)],
@@ -103,20 +102,20 @@ MEL_B = [
     ("D5", 1.5), ("F5", .5), ("Ab5", 1.5), ("G5", .5),         # Fm6 上の A♭
     ("G5", 2), ("F5", .5), ("D5", .5), ("B4", 1),
 ]
-# イントロの鉄琴（テーマの予告）
-GLOCK_INTRO = [
-    ("C6", 1), ("D6", .5), ("E6", .5), ("G6", 2),
-    ("D6", 1), ("C6", .5), ("A5", .5), ("C6", 2),
-    ("A5", 1), ("C6", 1), ("Eb6", 2),
-    ("D6", 2), ("B5", 2),
+# 最後の A'' 用: 後半 4 小節で音域を上げて曲の頂点（E6）を作る
+MEL_A3 = MEL_A2[:16] + [
+    ("D5", 2), ("G5", .5), ("A5", .5), ("B5", 1),              # G7 で駆け上がる
+    ("C6", 1.5), ("A5", .5), ("E6", 1.5), ("D6", .5),          # 頂点
+    ("C6", 1), ("A5", .5), ("F5", .5), ("B5", 1), ("D6", 1),
+    ("C6", 1.5), ("A5", .5), ("Ab5", 1.5), ("F5", .5),         # Fm6 で A→A♭ と半音下降
+    ("C6", 3), ("r", 1),                                       # 高いドで着地
 ]
 
 SECTIONS = [  # (名前, 小節, 旋律, 編成の強さ)
-    ("intro", INTRO, None, 0),
-    ("A", A, MEL_A, 1),
+    ("A", A, MEL_A, 1),          # イントロなしで、いきなり A メロから
     ("A'", A2, MEL_A2, 2),
     ("B", B, MEL_B, 3),
-    ("A''", A2, MEL_A2, 4),
+    ("A''", A2, MEL_A3, 4),      # 盛り上がり（サビ相当）
 ]
 TOTAL_BEATS = sum(len(s[1]) * BAR for s in SECTIONS)
 LOOP_SEC = TOTAL_BEATS * BEAT
@@ -320,6 +319,36 @@ def clarinet(m, dur, vel=0.5):
     return vel * out / 4
 
 
+def horn(m, dur, vel=0.3):
+    """ホルン風: 柔らかく丸い金管の持続音（A'' の厚み担当）"""
+    n = int((dur + 0.3) * SR)
+    t = np.arange(n) / SR
+    f0 = hz(m)
+    env = adsr(n, 0.12, 0.25)
+    ph = 2 * np.pi * f0 * t + 2 * np.pi * f0 * 0.002 * np.sin(2 * np.pi * 4.5 * t) / 4.5
+    out = np.zeros(n)
+    for k in range(1, 10):
+        if k * f0 > 3000:
+            break
+        out += np.exp(-k * f0 / 900) * env ** (1 + 0.25 * k) * np.sin(k * ph)
+    return vel * out / 1.5
+
+
+def snare(vel):
+    n = int(0.25 * SR)
+    t = np.arange(n) / SR
+    return vel * (shaped_noise(n, 1200, 9000) * np.exp(-t / 0.09)
+                  + 0.6 * np.sin(2 * np.pi * 190 * t) * np.exp(-t / 0.04))
+
+
+def crash(vel, reverse=False):
+    n = int(2.2 * SR)
+    t = np.arange(n) / SR
+    metal = sum(np.sin(2 * np.pi * f * t + rng.uniform(0, 6)) for f in (3150, 4420, 5870, 7330, 8990))
+    x = (shaped_noise(n, 3000, 16000) + 0.15 * metal) * np.exp(-t / 0.45) * np.minimum(1, t / 0.002)
+    return vel * (x[::-1] if reverse else x)
+
+
 def kick(vel):
     n = int(0.3 * SR)
     t = np.arange(n) / SR
@@ -336,10 +365,10 @@ def tambourine(vel):
 
 # ---------------------------------------------------------------- 配置
 TRACKS = {k: np.zeros(int((LOOP_SEC + 4) * SR)) for k in
-          ("lead", "harmony", "guitar", "piano", "bass", "strings", "violin", "accordion", "glock",
-           "shaker", "brush", "wood", "kick", "tamb")}
+          ("lead", "harmony", "guitar", "piano", "bass", "strings", "violin", "horn", "accordion",
+           "glock", "shaker", "brush", "wood", "kick", "tamb", "snare", "crash")}
 MIDI_EVENTS = {k: [] for k in ("lead", "harmony", "guitar", "piano", "bass", "strings", "violin",
-                                "accordion", "glock", "drums")}
+                                "horn", "accordion", "glock", "drums")}
 
 
 def place(track, beat, sig):
@@ -391,7 +420,7 @@ def arrange():
                 all_chords.append((beat + pos, ln, ch, lvl, name))
                 pos += ln
             beat += BAR
-    # ループ先頭（イントロの F）に向かうアプローチも計算できるよう、先頭を末尾に複製
+    # ループ先頭（A の F）に向かうアプローチも計算できるよう、先頭を末尾に複製
     roots = [midi(CHORDS[c[2]][0]) for c in all_chords] + [midi(CHORDS[all_chords[0][2]][0])]
 
     for i, (b, ln, ch, lvl, sec) in enumerate(all_chords):
@@ -399,15 +428,13 @@ def arrange():
         voicing = [midi(x) for x in CHORDS[ch][1]]
         # --- ギター: 8分音符のアルペジオ
         pattern = [0, 2, 1, 3, 2, 1, 3, 2]
-        gvel = 0.42 if lvl else 0.5
+        gvel = 0.42
         for s in range(int(ln * 2)):
             idx = pattern[s % 8] if s else 0
             acc = 1.0 if s % 2 == 0 else 0.75
             note("guitar", b + s * 0.5, voicing[idx], 0.9, gvel * acc, guitar)
         # --- ベース: ルート → 5度 → 次のルートへの経過音（F→E→D→C の順次下降を活かす）
-        if sec == "intro" and b < 2 * BAR:
-            pass
-        elif ln == 4:
+        if ln == 4:
             note("bass", b, root, 1.8, 0.85, bass)
             note("bass", b + 2, root + 7 if root + 7 <= midi("D3") else root - 5, 0.9, 0.6, bass)
             note("bass", b + 3, approach(root, roots[i + 1]), 0.9, 0.55, bass)
@@ -427,17 +454,19 @@ def arrange():
             note("strings", b, root + 12, ln * 0.98, sv * 0.9, strings)        # チェロ
         if lvl >= 3:
             note("violin", b, voicing[-1] + 12, ln * 0.98, sv * 0.8, strings)  # 高音のヴァイオリン
-        # --- ピアノ: イントロは全音符、以降は 2・4 拍目の裏打ち（ベースとで“ズン・チャッ”）
-        if lvl == 0:
+        # --- ピアノ: 2・4 拍目の裏打ち（ベースとで“ズン・チャッ”）。A'' は 1 拍目にオクターブ上も足す
+        for off in ((1, 3) if ln == 4 else (1,)):
             for v in voicing[1:]:
-                note("piano", b, v, ln, 0.28, piano)
-        else:
-            for off in ((1, 3) if ln == 4 else (1,)):
-                for v in voicing[1:]:
-                    note("piano", b + off, v, 0.6, 0.22, piano)
+                note("piano", b + off, v, 0.6, 0.22 if lvl < 4 else 0.26, piano)
+        if lvl == 4:
+            for v in voicing[1:]:
+                note("piano", b, v + 12, 0.9, 0.16, piano)
+            # --- ホルン: 中音域の和音で厚みを足す
+            for v in voicing[1:3]:
+                note("horn", b, v, ln * 0.97, 0.3, horn)
         # --- 打楽器
         if lvl >= 1:
-            for off in ((0, 2) if lvl >= 3 and ln == 4 else (0,)):
+            for off in ((0, 2) if lvl >= 3 and ln == 4 else (0, 1.5) if lvl == 4 else (0,)):
                 place("kick", b + off, kick(0.55))
                 MIDI_EVENTS["drums"].append((b + off, 0.25, 36, 0.5))
         for s in range(int(ln * 2)):
@@ -451,12 +480,34 @@ def arrange():
                 if lvl >= 3:
                     place("tamb", bb + human(4), tambourine(0.08))
                     MIDI_EVENTS["drums"].append((bb, 0.25, 54, 0.4))
+                if lvl == 4:  # A'' はスネアのバックビート
+                    place("snare", bb + human(3), snare(0.22))
+                    MIDI_EVENTS["drums"].append((bb, 0.25, 38, 0.5))
+            if lvl == 4 and s % 2 == 1:  # A'' はタンバリンを 8 分の裏にも
+                place("tamb", bb + human(4), tambourine(0.05))
+                MIDI_EVENTS["drums"].append((bb, 0.25, 54, 0.3))
         if lvl == 3 and ln == 4:
             place("wood", b + 3.5, woodblock(0.10))
             MIDI_EVENTS["drums"].append((b + 3.5, 0.25, 76, 0.4))
         # --- 鉄琴: B は各小節頭にコードの3度を高音で
         if lvl == 3 and ln == 4:
             note("glock", b, voicing[2] + 24 if voicing[2] + 24 < 100 else voicing[2] + 12, 2, 0.25, glock)
+
+    # --- 盛り上がりへの橋渡し: B の最後 2 拍でスネアのクレッシェンド＋逆再生シンバル、A'' 頭でクラッシュ
+    sec_start, b_end = {}, 0.0
+    for name, bars, _, _ in SECTIONS:
+        sec_start[name] = b_end
+        b_end += len(bars) * BAR
+    top = sec_start["A''"]
+    for j in range(8):
+        bb = top - 2 + j * 0.25
+        place("snare", bb, snare(0.08 + 0.05 * j))
+        MIDI_EVENTS["drums"].append((bb, 0.2, 38, 0.3 + 0.08 * j))
+    swell = crash(0.25, reverse=True)
+    place("crash", top - len(swell) / SR / BEAT, swell)
+    for bb in (top, top + 4 * BAR):
+        place("crash", bb, crash(0.35 if bb == top else 0.22))
+        MIDI_EVENTS["drums"].append((bb, 2, 49, 0.6))
 
     def chord_at(pos):
         for cb, cln, ch, _, _ in all_chords:
@@ -472,22 +523,19 @@ def arrange():
             for nm, ln in mel:
                 if nm != "r":
                     m = midi(nm)
-                    vel = 0.8 + 0.1 * (ln >= 1.5)
+                    vel = 0.8 + 0.1 * (ln >= 1.5) + 0.08 * (lvl == 4)
                     note("lead", pos, m, ln * 0.92, vel, recorder)  # ハーモニカに戻す場合は harmonica
                     # クラリネットのハモり: A' は長い音だけ、B と A'' は全部
                     if lvl >= 3 or (lvl == 2 and ln >= 1):
                         h = harmony_note(m, chord_at(pos))
                         if h is not None:
                             note("harmony", pos, h, ln * 0.92, 0.55, clarinet)
-                    if lvl == 4 and ln >= 1:   # 最後の A'' は鉄琴で長い音をオクターブ上に重ねる
-                        note("glock", pos, m + 12, ln, 0.16, glock)
+                    if lvl == 4:   # A'' は弦楽が旋律をオクターブ下で、鉄琴が長い音をオクターブ上で重ねる
+                        note("violin", pos, m - 12, ln * 0.98, 0.22, strings)
+                        if ln >= 1:
+                            note("glock", pos, m + 12, ln, 0.16, glock)
                 pos += ln
             assert abs(pos - beat - len(bars) * BAR) < 1e-9, (name, pos - beat)
-        elif name == "intro":
-            pos = beat
-            for nm, ln in GLOCK_INTRO:
-                note("glock", pos, midi(nm), ln, 0.33, glock)
-                pos += ln
         beat += len(bars) * BAR
 
 
@@ -529,6 +577,9 @@ def mix():
         "shaker": (1.80, -0.50, 0.10),
         "brush": (1.40, 0.20, 0.15),
         "wood": (0.80, -0.25, 0.30),
+        "horn": (0.40, 0.15, 0.45),
+        "snare": (0.55, 0.10, 0.25),
+        "crash": (0.16, -0.30, 0.30),
     }
     n = len(TRACKS["lead"])
     dry = np.zeros((2, n))
@@ -549,8 +600,10 @@ def mix():
     tail = out[:, L:]
     loop[:, : tail.shape[1]] += tail[:, :L]
     # ほんのり温かく（軽い飽和）+ 正規化
-    loop = np.tanh(loop / np.abs(loop).max() * 1.2) / np.tanh(1.2) * 0.89
-    return loop
+    first = out[:, :L]                       # 1 周目（前周の余韻なし）は試聴版の頭に使う
+    peak = np.abs(loop).max()
+    warm = lambda x: np.tanh(x / peak * 1.2) / np.tanh(1.2) * 0.89  # noqa: E731
+    return warm(loop), warm(first)
 
 
 def write_wav(path, x):
@@ -581,6 +634,7 @@ def write_midi(path):
         "piano": (6, 0, "Piano"),
         "strings": (7, 48, "Strings"),
         "violin": (8, 40, "Violin"),
+        "horn": (10, 60, "French Horn"),
         "bass": (2, 32, "Acoustic Bass"),
         "accordion": (3, 21, "Accordion"),
         "glock": (4, 9, "Glockenspiel"),
@@ -619,13 +673,14 @@ def main():
     outdir = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__))
     os.makedirs(outdir, exist_ok=True)
     arrange()
-    loop = mix()
+    loop, first = mix()
     loop_wav = os.path.join(outdir, "yunagi-dori_loop.wav")
     write_wav(loop_wav, loop)
     # 試聴用フル版: ループ 2 周 + 8 秒フェードアウト（ゲームOST 風）
     fade = int(8 * SR)
-    full = np.concatenate([loop, loop, loop[:, :fade]], axis=1)
+    full = np.concatenate([first, loop, loop[:, :fade]], axis=1)
     full[:, -fade:] *= np.linspace(1, 0, fade) ** 2
+    full[:, :441] *= np.linspace(0, 1, 441)  # 再生開始のクリック防止（10ms）
     full_wav = os.path.join(outdir, "yunagi-dori_full.wav")
     write_wav(full_wav, full)
     write_midi(os.path.join(outdir, "yunagi-dori.mid"))
