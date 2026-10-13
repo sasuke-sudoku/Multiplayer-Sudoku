@@ -42,7 +42,7 @@ export const Background: React.FC = () => {
       <AbsoluteFill
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,0.04) 2px, transparent 2px)",
+            "linear-gradient(rgba(0,0,0,0.03) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,0.03) 2px, transparent 2px)",
           backgroundSize: "90px 90px",
           backgroundPosition: `0px ${(frame * 1.5) % 90}px`,
         }}
@@ -149,6 +149,7 @@ export const Card: React.FC<{ children: React.ReactNode; style?: React.CSSProper
     style={{
       background: colors.card,
       border: `3px solid ${colors.cardBorder}`,
+      boxShadow: "0 8px 20px rgba(17,17,17,0.08)",
       borderRadius: 36,
       padding: "28px 40px",
       color: colors.text,

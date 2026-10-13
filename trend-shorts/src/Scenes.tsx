@@ -57,7 +57,7 @@ const Hook: React.FC<{ s: SceneTiming }> = ({ s }) => (
 );
 
 const ProfileRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div style={{ display: "flex", gap: 20, fontSize: 40, lineHeight: 1.45 }}>
+  <div style={{ display: "flex", gap: 20, fontSize: 44, lineHeight: 1.45 }}>
     <span style={{ color: colors.muted, fontWeight: 700, width: 110, flexShrink: 0 }}>{label}</span>
     <span style={{ color: colors.text, fontWeight: 900 }}>{value}</span>
   </div>
@@ -106,7 +106,7 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
         {["AIソフト①", "AIソフト②", "AIソフト③"].map((name, i) => (
           <Pop key={name} start={t + 6 + i * 8}>
             <Card style={{ padding: "16px 26px", textAlign: "center" }}>
-              <div style={{ fontSize: 36, fontWeight: 700, color: colors.muted }}>{name}</div>
+              <div style={{ fontSize: 40, fontWeight: 700, color: colors.muted }}>{name}</div>
               <div style={{ fontSize: 72, fontWeight: 900, color: colors.danger, lineHeight: 1 }}>✕</div>
             </Card>
           </Pop>
@@ -206,13 +206,13 @@ const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
       <div style={{ display: "flex", gap: 24, width: "100%" }}>
         <Pop start={t + 6} style={{ flex: 1 }}>
           <Card style={{ textAlign: "center", padding: "22px 10px" }}>
-            <div style={{ fontSize: 40, color: colors.muted, fontWeight: 700 }}>有料顧客</div>
+            <div style={{ fontSize: 44, color: colors.muted, fontWeight: 700 }}>有料顧客</div>
             <div style={{ fontSize: 76, fontWeight: 900 }}>1万人</div>
           </Card>
         </Pop>
         <Pop start={t + 40} style={{ flex: 1 }}>
           <Card style={{ textAlign: "center", padding: "22px 10px" }}>
-            <div style={{ fontSize: 40, color: colors.muted, fontWeight: 700 }}>今年の売上見込み</div>
+            <div style={{ fontSize: 44, color: colors.muted, fontWeight: 700 }}>今年の売上見込み</div>
             <div style={{ fontSize: 76, fontWeight: 900, color: colors.danger }}>約15億円</div>
           </Card>
         </Pop>

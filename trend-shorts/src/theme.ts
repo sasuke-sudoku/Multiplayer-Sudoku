@@ -18,9 +18,9 @@ export const colors = {
   highlight: "#ffd400",
   danger: "#e8173b",
   text: "#111111",
-  muted: "#5b6170",
-  card: "#f3f4f6",
-  cardBorder: "#e3e5ea",
+  muted: "#3a404d",
+  card: "#f1f3f7",
+  cardBorder: "#c4cad6",
 };
 
 export type Line = {
