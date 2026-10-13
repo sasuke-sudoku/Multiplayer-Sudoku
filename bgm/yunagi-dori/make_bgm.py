@@ -111,6 +111,13 @@ MEL_A3 = MEL_A2[:16] + [
     ("C6", 3), ("r", 1),                                       # 高いドで着地
 ]
 
+# ピアノ独奏のイントロ（最初の 1 回だけ。ループには含めない）
+# 右手: 主題の頭を 1 オクターブ上で予告 / 左手: F → C/E → Dm7 → G7 のベース下降と和音
+INTRO_BARS = 2
+INTRO_RH = [("C6", 1), ("D6", .5), ("E6", .5), ("G6", 2),
+            ("A5", 1), ("C6", 1), ("D6", 1), ("B5", 1)]
+INTRO_LH = [("F", 0, 2), ("C/E", 2, 2), ("Dm7", 4, 2), ("G7", 6, 2)]  # (コード, 開始拍, 拍数)
+
 SECTIONS = [  # (名前, 小節, 旋律, 編成の強さ)
     ("A", A, MEL_A, 1),          # イントロなしで、いきなり A メロから
     ("A'", A2, MEL_A2, 2),
@@ -368,6 +375,7 @@ def tambourine(vel):
 TRACKS = {k: np.zeros(int((LOOP_SEC + 4) * SR)) for k in
           ("lead", "harmony", "guitar", "piano", "bass", "strings", "violin", "horn", "accordion",
            "glock", "shaker", "brush", "wood", "kick", "tamb", "snare", "crash")}
+MIDI_INTRO = []  # ピアノ独奏イントロ（MIDI ではピアノトラックの先頭に置く）
 MIDI_EVENTS = {k: [] for k in ("lead", "harmony", "guitar", "piano", "bass", "strings", "violin",
                                 "horn", "accordion", "glock", "drums")}
 
@@ -607,7 +615,34 @@ def mix():
     first = out[:, :L]                       # 1 周目（前周の余韻なし）は試聴版の頭に使う
     peak = np.abs(loop).max()
     warm = lambda x: np.tanh(x / peak * 1.2) / np.tanh(1.2) * 0.89  # noqa: E731
-    return warm(loop), warm(first)
+    return warm(loop), warm(first), warm(render_intro(ir))
+
+
+def render_intro(ir):
+    """ピアノ独奏のイントロ。余韻（ペダルとリバーブ）は A の頭に重ねるので長さは 2 小節 + 余韻"""
+    n = int((INTRO_BARS * BAR * BEAT + 4) * SR)
+    x = np.zeros(n)
+
+    def put(beat, sig):
+        i = max(0, int(round(beat * BEAT * SR)))
+        k = min(len(sig), n - i)
+        x[i:i + k] += sig[:k]
+
+    pos = 0.0
+    for nm, ln in INTRO_RH:
+        put(pos + human(5), piano(midi(nm), (ln + 0.3) * BEAT, 0.55))
+        MIDI_INTRO.append((pos, ln, midi(nm), 0.55))
+        pos += ln
+    for ch, b, ln in INTRO_LH:
+        bass_nm, voicing = CHORDS[ch]
+        lh = [midi(bass_nm) + 12] + [midi(v) for v in voicing[:3]]
+        for j, m in enumerate(lh):  # 下から軽くばらして弾く
+            put(b + j * 0.08, piano(m, (ln - j * 0.08) * BEAT, 0.42 if j == 0 else 0.3))
+            MIDI_INTRO.append((b + j * 0.08, ln - j * 0.08, m, 0.42 if j == 0 else 0.3))
+    x *= 0.45 * 1.6                                   # ミックス時のピアノ音量 × 独奏なので少し前に
+    wet = fft_conv(x * 0.35, ir)[:n]
+    wet_r = fft_conv(x * 0.35, np.roll(ir, 113))[:n]
+    return pan(x, 0.0) + np.stack([wet, wet_r]) * 0.5
 
 
 def write_wav(path, x):
@@ -651,7 +686,11 @@ def write_midi(path):
     tracks.append(meta)
     for key, (ch, prog, nm) in spec.items():
         ev = []
-        for b, d, m, v in MIDI_EVENTS[key]:
+        shift = INTRO_BARS * BAR
+        events = [(b + shift, d, m, v) for b, d, m, v in MIDI_EVENTS[key]]
+        if key == "piano":
+            events += MIDI_INTRO
+        for b, d, m, v in events:
             on = int(round(b * TPB))
             off = int(round((b + d) * TPB))
             vel = max(1, min(127, int(v * 127 if key != "drums" else 80)))
@@ -677,23 +716,28 @@ def main():
     outdir = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__))
     os.makedirs(outdir, exist_ok=True)
     arrange()
-    loop, first = mix()
+    loop, first, intro = mix()
     loop_wav = os.path.join(outdir, "yunagi-dori_loop.wav")
     write_wav(loop_wav, loop)
     # 試聴用フル版: ループ 2 周 + 8 秒フェードアウト（ゲームOST 風）
     fade = int(8 * SR)
-    full = np.concatenate([first, loop, loop[:, :fade]], axis=1)
+    intro_len = int(round(INTRO_BARS * BAR * BEAT * SR))
+    first = first.copy()
+    first[:, : intro.shape[1] - intro_len] += intro[:, intro_len:]   # イントロの余韻を A の頭に重ねる
+    full = np.concatenate([intro[:, :intro_len], first, loop, loop[:, :fade]], axis=1)
     full[:, -fade:] *= np.linspace(1, 0, fade) ** 2
     full[:, :441] *= np.linspace(0, 1, 441)  # 再生開始のクリック防止（10ms）
     full_wav = os.path.join(outdir, "yunagi-dori_full.wav")
     write_wav(full_wav, full)
+    write_wav(os.path.join(outdir, "yunagi-dori_intro.wav"), intro[:, :intro_len])
     write_midi(os.path.join(outdir, "yunagi-dori.mid"))
     print(f"loop length: {LOOP_SEC:.2f}s ({TOTAL_BEATS // BAR} bars @ {BPM} BPM)")
     try:
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", full_wav, "-b:a", "192k",
                         os.path.join(outdir, "yunagi-dori_full.mp3")], check=True)
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", loop_wav, "-c:a", "libvorbis", "-q:a", "6",
-                        os.path.join(outdir, "yunagi-dori_loop.ogg")], check=True)
+        for nm in ("loop", "intro"):
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(outdir, f"yunagi-dori_{nm}.wav"),
+                            "-c:a", "libvorbis", "-q:a", "6", os.path.join(outdir, f"yunagi-dori_{nm}.ogg")], check=True)
     except (FileNotFoundError, subprocess.CalledProcessError) as e:
         print("ffmpeg 変換をスキップ:", e)
 
