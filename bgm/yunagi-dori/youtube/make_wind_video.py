@@ -275,7 +275,7 @@ def main():
         render_frame(f, img, M, fields, leaves, motes).save(os.path.join(frames_dir, f"{f:04d}.png"), compress_level=1)
         if f % 60 == 0:
             print(f"frame {f}/{N}", flush=True)
-    if preview:
+    if preview or "--frames-only" in sys.argv:   # --frames-only: ループの各フレームだけ残す（make_story_video.py 用）
         return
 
     # テキストレイヤー（1920x1080）
