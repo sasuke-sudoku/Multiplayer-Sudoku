@@ -170,10 +170,10 @@ def guitar(m, dur, vel=0.5):
         if k * f0 > 7000:
             break
         amp = abs(np.sin(np.pi * k * 0.18)) / k
-        tau = 1.6 / (1 + 0.25 * k ** 1.3)
+        tau = 2.6 / (1 + 0.25 * k ** 1.3)
         out += amp * np.exp(-t / tau) * np.sin(2 * np.pi * k * f0 * 1.0007 ** (k - 1) * t)
     out *= np.minimum(1, t / 0.004)
-    rel = int(0.12 * SR)
+    rel = int(0.3 * SR)
     end = int(dur * SR)
     if end + rel < n:
         out[end:end + rel] *= np.linspace(1, 0, rel)
@@ -188,27 +188,28 @@ def bass(m, dur, vel=0.8):
     f0 = hz(m)
     out = np.zeros(n)
     for k, a in zip(range(1, 7), (1, 0.55, 0.25, 0.12, 0.06, 0.03)):
-        out += a * np.exp(-t / (0.9 / k ** 0.8)) * np.sin(2 * np.pi * k * f0 * t)
+        out += a * np.exp(-t / (1.4 / k ** 0.8)) * np.sin(2 * np.pi * k * f0 * t)
     out += 0.25 * np.exp(-t / 0.015) * rng.standard_normal(n) * 0.3   # 指が弦に当たる音
     return vel * out * adsr(n, 0.006, 0.12) / 1.6
 
 
-def recorder(m, dur, vel=0.8):
-    """アルトリコーダー風: 基音中心の柔らかい音 + 発音時のチフ（息の雑音）+ ごく浅いビブラート"""
-    n = int((dur + 0.06) * SR)
+def recorder(m, dur, vel=0.8, legato=False):
+    """アルトリコーダー風: 基音中心の柔らかい音 + 発音時のチフ（息の雑音）+ ごく浅いビブラート
+    legato=True は前の音から息を切らずに続ける吹き方（チフを弱く、立ち上がりを滑らかに）"""
+    n = int((dur + 0.3) * SR)
     t = np.arange(n) / SR
     f0 = hz(m)
     cents = 14 * np.exp(-t / 0.025)                               # 吹き始めにわずかに上ずる
     cents += 6 * np.clip((t - 0.4) / 0.4, 0, 1) * np.sin(2 * np.pi * 4.8 * t + rng.uniform(0, 6))
     ph = 2 * np.pi * np.cumsum(f0 * 2 ** (cents / 1200)) / SR
-    env = adsr(n, 0.03, 0.05, sus_decay=0.05)
+    env = adsr(n, 0.05 if legato else 0.03, 0.3, sus_decay=0.02)
     out = np.zeros(n)
     for k, a in ((1, 1.0), (2, 0.10), (3, 0.16), (4, 0.03), (5, 0.04), (7, 0.01)):
         if k * f0 < 12000:
             out += a * env ** (1 + 0.15 * k) * np.sin(k * ph)
     chiff = shaped_noise(n, 2 * f0, 7000) * np.exp(-t / 0.018)
     air = shaped_noise(n, 1500, 6000) * env
-    out += 0.22 * chiff + 0.025 * air
+    out += (0.08 if legato else 0.22) * chiff + 0.025 * air
     return vel * out / 5.5
 
 
@@ -233,7 +234,7 @@ def glock(m, dur, vel=0.4):
     t = np.arange(n) / SR
     f0 = hz(m)
     out = np.zeros(n)
-    for r, a, tau in ((1, 1, 1.2), (2.76, 0.35, 0.35), (5.40, 0.15, 0.12), (8.93, 0.08, 0.05)):
+    for r, a, tau in ((1, 1, 2.0), (2.76, 0.35, 0.5), (5.40, 0.15, 0.12), (8.93, 0.08, 0.05)):
         if r * f0 < 16000:
             out += a * np.exp(-t / tau) * np.sin(2 * np.pi * r * f0 * t)
     return vel * out * np.minimum(1, t / 0.002) / 2
@@ -305,12 +306,12 @@ def piano(m, dur, vel=0.3):
 
 def clarinet(m, dur, vel=0.5):
     """クラリネット風（奇数倍音が強い、柔らかなハモり担当）"""
-    n = int((dur + 0.08) * SR)
+    n = int((dur + 0.3) * SR)
     t = np.arange(n) / SR
     f0 = hz(m)
     cents = 4 * np.clip((t - 0.4) / 0.4, 0, 1) * np.sin(2 * np.pi * 5 * t)
     ph = 2 * np.pi * np.cumsum(f0 * 2 ** (cents / 1200)) / SR
-    env = adsr(n, 0.05, 0.08, sus_decay=0.08)
+    env = adsr(n, 0.06, 0.3, sus_decay=0.03)
     out = np.zeros(n)
     for k, a in ((1, 1), (2, 0.04), (3, 0.42), (4, 0.03), (5, 0.22), (7, 0.1), (9, 0.05)):
         if k * f0 < 9000:
@@ -432,15 +433,15 @@ def arrange():
         for s in range(int(ln * 2)):
             idx = pattern[s % 8] if s else 0
             acc = 1.0 if s % 2 == 0 else 0.75
-            note("guitar", b + s * 0.5, voicing[idx], 0.9, gvel * acc, guitar)
+            note("guitar", b + s * 0.5, voicing[idx], 2.0, gvel * acc, guitar)  # 弦を鳴らしっぱなしに
         # --- ベース: ルート → 5度 → 次のルートへの経過音（F→E→D→C の順次下降を活かす）
         if ln == 4:
-            note("bass", b, root, 1.8, 0.85, bass)
-            note("bass", b + 2, root + 7 if root + 7 <= midi("D3") else root - 5, 0.9, 0.6, bass)
-            note("bass", b + 3, approach(root, roots[i + 1]), 0.9, 0.55, bass)
+            note("bass", b, root, 2.0, 0.85, bass)
+            note("bass", b + 2, root + 7 if root + 7 <= midi("D3") else root - 5, 1.0, 0.6, bass)
+            note("bass", b + 3, approach(root, roots[i + 1]), 1.0, 0.55, bass)
         else:
-            note("bass", b, root, 1.4, 0.85, bass)
-            note("bass", b + 1.5, root + 7 if root + 7 <= midi("D3") else root - 5, 0.45, 0.5, bass)
+            note("bass", b, root, 1.5, 0.85, bass)
+            note("bass", b + 1.5, root + 7 if root + 7 <= midi("D3") else root - 5, 0.5, 0.5, bass)
         # --- アコーディオン: A' 以降に薄く
         if lvl >= 2:
             av = {2: 0.10, 3: 0.14, 4: 0.12}[lvl]
@@ -457,10 +458,10 @@ def arrange():
         # --- ピアノ: 2・4 拍目の裏打ち（ベースとで“ズン・チャッ”）。A'' は 1 拍目にオクターブ上も足す
         for off in ((1, 3) if ln == 4 else (1,)):
             for v in voicing[1:]:
-                note("piano", b + off, v, 0.6, 0.22 if lvl < 4 else 0.26, piano)
+                note("piano", b + off, v, 1.0, 0.22 if lvl < 4 else 0.26, piano)
         if lvl == 4:
             for v in voicing[1:]:
-                note("piano", b, v + 12, 0.9, 0.16, piano)
+                note("piano", b, v + 12, 1.8, 0.16, piano)
             # --- ホルン: 中音域の和音で厚みを足す
             for v in voicing[1:3]:
                 note("horn", b, v, ln * 0.97, 0.3, horn)
@@ -520,16 +521,19 @@ def arrange():
     for name, bars, mel, lvl in SECTIONS:
         if mel:
             pos = beat
+            prev_rest = True
             for nm, ln in mel:
+                legato = not prev_rest
+                prev_rest = nm == "r"
                 if nm != "r":
                     m = midi(nm)
                     vel = 0.8 + 0.1 * (ln >= 1.5) + 0.08 * (lvl == 4)
-                    note("lead", pos, m, ln * 0.92, vel, recorder)  # ハーモニカに戻す場合は harmonica
+                    note("lead", pos, m, ln, vel, lambda m_, d, v, lg=legato: recorder(m_, d, v, lg))  # ハーモニカに戻す場合は harmonica
                     # クラリネットのハモり: A' は長い音だけ、B と A'' は全部
                     if lvl >= 3 or (lvl == 2 and ln >= 1):
                         h = harmony_note(m, chord_at(pos))
                         if h is not None:
-                            note("harmony", pos, h, ln * 0.92, 0.55, clarinet)
+                            note("harmony", pos, h, ln, 0.55, clarinet)
                     if lvl == 4:   # A'' は弦楽が旋律をオクターブ下で、鉄琴が長い音をオクターブ上で重ねる
                         note("violin", pos, m - 12, ln * 0.98, 0.22, strings)
                         if ln >= 1:
@@ -540,10 +544,10 @@ def arrange():
 
 
 # ---------------------------------------------------------------- ミックス
-def reverb_ir(sec=2.2):
+def reverb_ir(sec=3.0):
     n = int(sec * SR)
     t = np.arange(n) / SR
-    ir = shaped_noise(n, 200, 7000) * np.exp(-t / 0.42)
+    ir = shaped_noise(n, 200, 7000) * np.exp(-t / 0.6)
     ir[: int(0.012 * SR)] = 0                          # プリディレイ
     for d, g in ((0.017, 0.5), (0.029, 0.35), (0.041, 0.28), (0.063, 0.2)):
         ir[int(d * SR)] += g * 8
