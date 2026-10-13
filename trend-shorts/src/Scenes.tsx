@@ -1,7 +1,9 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Card, CountUp, Pop, Tag, usePop } from "./parts";
-import { colors, images, SceneTiming, visuals } from "./theme";
+import { colors, images, SceneData, SceneTiming } from "./theme";
+
+type SceneProps<T extends keyof SceneData> = { s: SceneTiming; d: SceneData[T] };
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -81,8 +83,7 @@ const Stat: React.FC<{ start: number; label: string; children: React.ReactNode; 
   </Pop>
 );
 
-const Hook: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.hook;
+const Hook: React.FC<SceneProps<"stats">> = ({ s, d: v }) => {
   const at = stagger(s, v.stats.length);
   return (
     <Stage>
@@ -107,8 +108,7 @@ const ProfileRow: React.FC<{ label: string; value: string }> = ({ label, value }
   </div>
 );
 
-const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.who;
+const Who: React.FC<SceneProps<"profile">> = ({ s, d: v }) => {
   const t = secondLine(s);
   return (
     <Stage>
@@ -161,8 +161,7 @@ const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-const Launch: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.launch;
+const Launch: React.FC<SceneProps<"reveal">> = ({ s, d: v }) => {
   const t = secondLine(s);
   return (
     <Stage>
@@ -225,8 +224,7 @@ const Launch: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.growth;
+const Growth: React.FC<SceneProps<"growth">> = ({ s, d: v }) => {
   const frame = useCurrentFrame();
   const t = secondLine(s);
   const bars = [0.08, 0.16, 0.3, 0.5, 0.75, 1];
@@ -271,8 +269,7 @@ const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-const How: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.how;
+const How: React.FC<SceneProps<"grid">> = ({ s, d: v }) => {
   const t = secondLine(s);
   const tasks = v.tasks;
   const at = stagger(s, tasks.length, 4);
@@ -309,8 +306,7 @@ const How: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.shadow;
+const Shadow: React.FC<SceneProps<"warning">> = ({ s, d: v }) => {
   const frame = useCurrentFrame();
   const t = secondLine(s);
   const shake = frame < 20 ? Math.sin(frame * 2.2) * (20 - frame) * 0.8 : 0;
@@ -337,8 +333,7 @@ const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-const Outro: React.FC<{ s: SceneTiming }> = ({ s }) => {
-  const v = visuals.outro;
+const Outro: React.FC<SceneProps<"question">> = ({ s, d: v }) => {
   const frame = useCurrentFrame();
   const t = secondLine(s);
   const pressed = frame > t + 40 && frame < t + 52;
@@ -386,12 +381,73 @@ const Outro: React.FC<{ s: SceneTiming }> = ({ s }) => {
   );
 };
 
-export const sceneComponents: Record<string, React.FC<{ s: SceneTiming }>> = {
-  hook: Hook,
-  who: Who,
-  launch: Launch,
+const BigText: React.FC<SceneProps<"bigtext">> = ({ s, d: v }) => {
+  const at = stagger(s, v.lines.length, 2);
+  return (
+    <Stage>
+      {v.kicker ? (
+        <Pop start={0}>
+          <Tag tone={v.tone ?? "blue"} style={{ fontSize: 44 }}>
+            {v.kicker}
+          </Tag>
+        </Pop>
+      ) : null}
+      {v.lines.map((line, i) => (
+        <Pop key={i} start={at(i)}>
+          <div style={{ fontSize: 96, fontWeight: 900, color: colors.text, textAlign: "center", lineHeight: 1.25 }}>
+            {highlightIn(line, v.highlight ?? "", v.tone === "red" ? colors.danger : colors.accent)}
+          </div>
+        </Pop>
+      ))}
+    </Stage>
+  );
+};
+
+const VersusCard: React.FC<{ item: { label: string; value: string; tone?: "blue" | "red" }; start: number }> = ({
+  item,
+  start,
+}) => (
+  <Pop start={start} style={{ width: "100%" }}>
+    <Card tone={item.tone ?? "blue"} style={{ textAlign: "center" }}>
+      <Tag tone={item.tone ?? "blue"} style={{ fontSize: 40 }}>
+        {item.label}
+      </Tag>
+      <div
+        style={{
+          fontSize: 100,
+          fontWeight: 900,
+          lineHeight: 1.15,
+          color: item.tone === "red" ? colors.danger : colors.accent,
+        }}
+      >
+        <Value value={item.value} start={start} />
+      </div>
+    </Card>
+  </Pop>
+);
+
+const Versus: React.FC<SceneProps<"versus">> = ({ s, d: v }) => {
+  const t = s.lines.length > 1 ? secondLine(s) : Math.floor(s.lines[0].duration / 2);
+  return (
+    <Stage>
+      <VersusCard item={v.before} start={2} />
+      <Pop start={t - 6}>
+        <div style={{ fontSize: 80, fontWeight: 900, color: colors.accent }}>{v.arrow ?? "↓"}</div>
+      </Pop>
+      <VersusCard item={v.after} start={t} />
+    </Stage>
+  );
+};
+
+// Scene types an episode can combine in any order (episode.scenes[].type).
+export const sceneComponents: { [K in keyof SceneData]: React.FC<SceneProps<K>> } = {
+  stats: Hook,
+  profile: Who,
+  reveal: Launch,
   growth: Growth,
-  how: How,
-  shadow: Shadow,
-  outro: Outro,
+  grid: How,
+  warning: Shadow,
+  question: Outro,
+  bigtext: BigText,
+  versus: Versus,
 };

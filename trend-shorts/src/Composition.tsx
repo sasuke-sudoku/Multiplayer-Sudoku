@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AbsoluteFill, Composition, continueRender, delayRender, Sequence, staticFile } from "remotion";
 import { Background, Caption, Header } from "./parts";
 import { sceneComponents } from "./Scenes";
-import { FPS, fontFamily, HEIGHT, lines, scenes, totalFrames, WIDTH } from "./theme";
+import { FPS, fontFamily, HEIGHT, lines, sceneDefs, scenes, totalFrames, WIDTH } from "./theme";
 
 export const MyComposition = () => {
   return (
@@ -30,11 +30,14 @@ export const TrendShort: React.FC = () => {
   return (
     <AbsoluteFill style={{ fontFamily }}>
       <Background />
-      {scenes.map((s) => {
-        const Scene = sceneComponents[s.id];
+      {scenes.map((s, i) => {
+        const def = sceneDefs.find((d) => d.id === s.id);
+        if (!def) throw new Error(`No scene "${s.id}" in episode.scenes`);
+        const Scene = sceneComponents[def.type] as React.FC<{ s: typeof s; d: typeof def.data }>;
+        if (!Scene) throw new Error(`Unknown scene type "${def.type}"`);
         return (
-          <Sequence key={s.id} name={`Scene: ${s.id}`} from={s.from} durationInFrames={s.duration}>
-            <Scene s={s} />
+          <Sequence key={i} name={`Scene: ${s.id} (${def.type})`} from={s.from} durationInFrames={s.duration}>
+            <Scene s={s} d={def.data} />
           </Sequence>
         );
       })}

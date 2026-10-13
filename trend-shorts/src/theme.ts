@@ -80,14 +80,17 @@ export const series: string = timeline.series;
 export const images: { founder: string; logo: string; site: string } = timeline.images;
 
 type Item = { label: string; value: string; tone?: "blue" | "red" };
-// On-screen text for each scene (everything that is not a caption). See README for the schema.
-export type Visuals = {
-  hook: { stats: Item[]; tagline: string };
-  who: { name: string; emoji: string; rows: { label: string; value: string }[]; chips: string[]; chipMark: string };
-  launch: { date: string; name: string; flow: string[]; pill: string };
+// Data for each scene type. An episode lists scenes as { id, type, data } in any order.
+export type SceneData = {
+  stats: { stats: Item[]; tagline: string };
+  profile: { name: string; emoji: string; rows: { label: string; value: string }[]; chips: string[]; chipMark: string };
+  reveal: { date: string; name: string; flow: string[]; pill: string };
   growth: { main: Item; cards: Item[] };
-  how: { tasks: string[]; taskTag: string; stamp: string };
-  shadow: { header: string; warnLabel: string; warn: string; after: string; afterHighlight: string };
-  outro: { question: string[]; questionHighlight: string; comment: string };
+  grid: { tasks: string[]; taskTag: string; stamp: string };
+  warning: { header: string; warnLabel: string; warn: string; after: string; afterHighlight: string };
+  question: { question: string[]; questionHighlight: string; comment: string };
+  bigtext: { kicker?: string; lines: string[]; highlight?: string; tone?: "blue" | "red" };
+  versus: { before: Item; after: Item; arrow?: string };
 };
-export const visuals = timeline.visuals as Visuals;
+export type SceneDef = { [K in keyof SceneData]: { id: string; type: K; data: SceneData[K] } }[keyof SceneData];
+export const sceneDefs = timeline.scenes as SceneDef[];

@@ -1,6 +1,6 @@
 # trend-shorts
 
-話題の企業・人物を紹介する、1080×1920・約55秒のYouTube Shortsを作るRemotionプロジェクトです。
+話題の企業・人物を紹介する、1080×1920・30〜60秒のYouTube Shortsを作るRemotionプロジェクトです。
 ナレーションは VOICEVOX（青山龍星）。1本の動画は `episodes/<slug>.json` 1ファイルで決まります。
 
 - 作り方の手順（Claude Code のスキル）: `../.claude/skills/company-shorts/SKILL.md`
@@ -26,17 +26,17 @@ npx remotion studio                          # 最後にビルドした回をプ
 | `description` | 概要欄の本文（出典・注意書き）。VOICEVOXクレジットは自動で付く |
 | `voice` | VOICEVOXの話者（`name` / `vvm` / `styleId` / `speed`） |
 | `images` | `founder`・`logo`・`site` の画像パス（`public/` からの相対。空欄なら代わりの表示） |
-| `visuals` | 各シーンの画面上の文字（カード・数値・ラベル）。数値はカウントアップする |
-| `lines` | ナレーション14行。`scene`・`text`（字幕、`\n` で改行）・`reading`（読み上げ文）・`highlight`（黄色マーカー） |
+| `scenes` | シーンの並び。`{ id, type, data }` を好きな順・数で並べる（type の一覧はスキル参照） |
+| `lines` | ナレーション。`scene`（scenes の id）・`text`（字幕、`\n` で改行）・`reading`（読み上げ文）・`highlight`（黄色マーカー） |
 
-シーンは `hook → who → launch → growth → how → shadow → outro` の7つで、各2行です。
+シーンタイプ: `stats` `bigtext` `profile` `reveal` `growth` `versus` `grid` `warning` `question`。構成は回ごとに自由です。
 
 ## ファイル構成
 
 - `scripts/setup.sh` / `scripts/build.sh` … 準備とビルド
 - `script/tts.py` … VOICEVOXでナレーションを作り `src/timeline.json` を出力
 - `script/contact_sheet.py` … チェック用の静止画一覧を作る
-- `src/Scenes.tsx` … シーンごとの映像（`visuals` を表示）
+- `src/Scenes.tsx` … シーンタイプごとの映像
 - `src/parts.tsx` / `src/theme.ts` … 共通パーツ・配色・タイミング計算
 
 VOICEVOXの音声を使った動画は、概要欄に「VOICEVOX:話者名」のクレジットが必要です。

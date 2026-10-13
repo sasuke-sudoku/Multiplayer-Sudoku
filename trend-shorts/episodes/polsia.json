@@ -13,101 +13,129 @@
     "logo": "",
     "site": ""
   },
-  "visuals": {
-    "hook": {
-      "stats": [
-        {
-          "label": "社員",
-          "value": "0人"
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "stats",
+      "data": {
+        "stats": [
+          {
+            "label": "社員",
+            "value": "0人"
+          },
+          {
+            "label": "顧客",
+            "value": "1万人"
+          },
+          {
+            "label": "売上（見込み）",
+            "value": "15億円",
+            "tone": "red"
+          }
+        ],
+        "tagline": "たった1人のAI会社"
+      }
+    },
+    {
+      "id": "who",
+      "type": "profile",
+      "data": {
+        "name": "Ben Broca",
+        "emoji": "👨‍💻",
+        "rows": [
+          {
+            "label": "年齢",
+            "value": "40歳"
+          },
+          {
+            "label": "会社",
+            "value": "Polsia（創業者）"
+          },
+          {
+            "label": "経歴",
+            "value": "CloudKitchens／Hutch共同創業"
+          }
+        ],
+        "chips": [
+          "AIソフト①",
+          "AIソフト②",
+          "AIソフト③"
+        ],
+        "chipMark": "✕"
+      }
+    },
+    {
+      "id": "launch",
+      "type": "reveal",
+      "data": {
+        "date": "2025.12 公開",
+        "name": "Polsia",
+        "flow": [
+          "立ち上げ",
+          "運営"
+        ],
+        "pill": "🤖 AIがまるごと代行"
+      }
+    },
+    {
+      "id": "growth",
+      "type": "growth",
+      "data": {
+        "main": {
+          "label": "約半年で 企業評価額（※売上ではない）",
+          "value": "約375億円"
         },
-        {
-          "label": "顧客",
-          "value": "1万人"
-        },
-        {
-          "label": "売上（見込み）",
-          "value": "15億円",
-          "tone": "red"
-        }
-      ],
-      "tagline": "たった1人のAI会社"
+        "cards": [
+          {
+            "label": "有料顧客",
+            "value": "1万人"
+          },
+          {
+            "label": "今年の売上見込み",
+            "value": "約15億円",
+            "tone": "red"
+          }
+        ]
+      }
     },
-    "who": {
-      "name": "Ben Broca",
-      "emoji": "👨‍💻",
-      "rows": [
-        {
-          "label": "年齢",
-          "value": "40歳"
-        },
-        {
-          "label": "会社",
-          "value": "Polsia（創業者）"
-        },
-        {
-          "label": "経歴",
-          "value": "CloudKitchens／Hutch共同創業"
-        }
-      ],
-      "chips": [
-        "AIソフト①",
-        "AIソフト②",
-        "AIソフト③"
-      ],
-      "chipMark": "✕"
+    {
+      "id": "how",
+      "type": "grid",
+      "data": {
+        "tasks": [
+          "📧 メール返信",
+          "💻 コード修正",
+          "💬 問い合わせ",
+          "💸 返金処理"
+        ],
+        "taskTag": "AIが担当 ✔",
+        "stamp": "社員は1人だけ"
+      }
     },
-    "launch": {
-      "date": "2025.12 公開",
-      "name": "Polsia",
-      "flow": [
-        "立ち上げ",
-        "運営"
-      ],
-      "pill": "🤖 AIがまるごと代行"
+    {
+      "id": "shadow",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ でも、光と影",
+        "warnLabel": "AI利用料がかさみ…（本人談）",
+        "warn": "一部顧客で赤字",
+        "after": "無料のオープンソースAIへ",
+        "afterHighlight": "無料"
+      }
     },
-    "growth": {
-      "main": {
-        "label": "約半年で 企業評価額（※売上ではない）",
-        "value": "約375億円"
-      },
-      "cards": [
-        {
-          "label": "有料顧客",
-          "value": "1万人"
-        },
-        {
-          "label": "今年の売上見込み",
-          "value": "約15億円",
-          "tone": "red"
-        }
-      ]
-    },
-    "how": {
-      "tasks": [
-        "📧 メール返信",
-        "💻 コード修正",
-        "💬 問い合わせ",
-        "💸 返金処理"
-      ],
-      "taskTag": "AIが担当 ✔",
-      "stamp": "社員は1人だけ"
-    },
-    "shadow": {
-      "header": "⚠️ でも、光と影",
-      "warnLabel": "AI利用料がかさみ…（本人談）",
-      "warn": "一部顧客で赤字",
-      "after": "無料のオープンソースAIへ",
-      "afterHighlight": "無料"
-    },
-    "outro": {
-      "question": [
-        "あなたなら",
-        "AIに何を任せる？"
-      ],
-      "questionHighlight": "何を任せる？",
-      "comment": "👇 コメントで教えてね"
+    {
+      "id": "outro",
+      "type": "question",
+      "data": {
+        "question": [
+          "あなたなら",
+          "AIに何を任せる？"
+        ],
+        "questionHighlight": "何を任せる？",
+        "comment": "👇 コメントで教えてね"
+      }
     }
-  },
+  ],
   "lines": [
     {
       "scene": "hook",
