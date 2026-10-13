@@ -1,7 +1,7 @@
 # trend-shorts
 
 話題の企業・人物を紹介する、1080×1920・約55秒のYouTube Shortsです（Remotion製）。
-ナレーションは VOICEVOX（冥鳴ひまり）です。
+ナレーションは VOICEVOX（青山龍星）です。
 
 ## 構成
 
@@ -18,7 +18,7 @@
 
 - [VOICEVOX CORE](https://github.com/VOICEVOX/voicevox_core/releases) 0.16.4 の Python wheel（`voicevox_core-0.16.4-cp310-abi3-manylinux_2_34_x86_64.whl`）→ `pip install` する
 - [onnxruntime](https://github.com/VOICEVOX/onnxruntime-builder/releases) の `voicevox_onnxruntime-linux-x64-1.17.3.tgz` → 展開する
-- [音声モデル](https://github.com/VOICEVOX/voicevox_vvm/releases) の `.vvm`（冥鳴ひまりは `1.vvm`）
+- [音声モデル](https://github.com/VOICEVOX/voicevox_vvm/releases) の `.vvm`（青山龍星は `15.vvm`、冥鳴ひまりは `1.vvm`）
 
 声を変えるときは `script/script.json` の `voice`（`vvm` と `styleId`）を書き換えます。
 **動画の概要欄には「VOICEVOX:話者名」のクレジットを必ず書いてください**（利用規約で決められています）。

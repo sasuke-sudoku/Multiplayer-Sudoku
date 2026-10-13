@@ -180,7 +180,7 @@ const Growth: React.FC<{ s: SceneTiming }> = ({ s }) => {
       </div>
       <Pop start={12} style={{ width: "100%" }}>
         <Card style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 46, fontWeight: 700, color: colors.muted }}>約半年で 評価額</div>
+          <div style={{ fontSize: 46, fontWeight: 700, color: colors.muted }}>約半年で 企業評価額（※売上ではない）</div>
           <div style={{ fontSize: 120, fontWeight: 900, color: colors.accent, lineHeight: 1.1 }}>
             約<CountUp start={12} to={375} duration={30} />億円
           </div>
@@ -251,8 +251,8 @@ const Shadow: React.FC<{ s: SceneTiming }> = ({ s }) => {
       </Pop>
       <div style={{ translate: `${shake}px 0px`, width: "100%" }}>
         <Card style={{ textAlign: "center", borderColor: colors.danger, background: "rgba(255,59,92,0.15)" }}>
-          <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted }}>AI利用料がかさみ…</div>
-          <div style={{ fontSize: 130, fontWeight: 900, color: colors.danger, lineHeight: 1.1 }}>赤字の顧客も</div>
+          <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted }}>AI利用料がかさみ…（本人談）</div>
+          <div style={{ fontSize: 112, fontWeight: 900, color: colors.danger, lineHeight: 1.1 }}>一部顧客で赤字</div>
         </Card>
       </div>
       <Pop start={t + 4}>

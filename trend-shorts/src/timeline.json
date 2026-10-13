@@ -1,24 +1,24 @@
 {
   "series": "🏢 注目の企業・人物",
-  "title": "社員ゼロで売上15億円？AIに会社を回させた40歳",
+  "title": "社員ゼロで売上15億円見込み？AIに会社を回させた40歳",
   "source": "出典：WSJ（2026/7/29）ほか報道・本人発信｜数字は本人発表値｜1ドル=150円換算",
   "voice": {
-    "name": "冥鳴ひまり",
-    "vvm": 1,
-    "styleId": 14,
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
     "speed": 1.15
   },
   "lines": [
     {
       "scene": "hook",
-      "text": "社員ゼロ。顧客1万人。\n売上15億円。",
-      "reading": "社員ゼロ。顧客1万人。売上15億円。",
+      "text": "社員ゼロ。顧客1万人。\n売上見込み15億円。",
+      "reading": "社員ゼロ。顧客1万人。売上見込み、15億円。",
       "highlight": [
         "社員ゼロ",
         "15億円"
       ],
       "file": "voice/00.wav",
-      "seconds": 3.501
+      "seconds": 4.397
     },
     {
       "scene": "hook",
@@ -28,7 +28,7 @@
         "たった1人"
       ],
       "file": "voice/01.wav",
-      "seconds": 4.301
+      "seconds": 4.109
     },
     {
       "scene": "who",
@@ -38,7 +38,7 @@
         "ベン・ブロカ"
       ],
       "file": "voice/02.wav",
-      "seconds": 2.285
+      "seconds": 2.2
     },
     {
       "scene": "who",
@@ -48,7 +48,7 @@
         "鳴かず飛ばず"
       ],
       "file": "voice/03.wav",
-      "seconds": 3.437
+      "seconds": 3.309
     },
     {
       "scene": "launch",
@@ -58,7 +58,7 @@
         "Polsia"
       ],
       "file": "voice/04.wav",
-      "seconds": 4.088
+      "seconds": 3.96
     },
     {
       "scene": "launch",
@@ -69,7 +69,7 @@
         "運営まで"
       ],
       "file": "voice/05.wav",
-      "seconds": 4.323
+      "seconds": 4.291
     },
     {
       "scene": "growth",
@@ -79,7 +79,7 @@
         "約375億円"
       ],
       "file": "voice/06.wav",
-      "seconds": 4.163
+      "seconds": 4.045
     },
     {
       "scene": "growth",
@@ -90,7 +90,7 @@
         "約15億円"
       ],
       "file": "voice/07.wav",
-      "seconds": 6.051
+      "seconds": 5.88
     },
     {
       "scene": "how",
@@ -98,7 +98,7 @@
       "reading": "メール返信、コード修正、問い合わせ、返金処理まで。",
       "highlight": [],
       "file": "voice/08.wav",
-      "seconds": 4.109
+      "seconds": 4.269
     },
     {
       "scene": "how",
@@ -108,17 +108,17 @@
         "ぜんぶAI"
       ],
       "file": "voice/09.wav",
-      "seconds": 3.437
+      "seconds": 3.597
     },
     {
       "scene": "shadow",
-      "text": "ただし、AIの利用料がかさみ、\n赤字になる顧客も。",
-      "reading": "ただし、AIの利用料がかさみ、赤字になる顧客も。",
+      "text": "ただし、AI利用料がかさみ、\n顧客によっては赤字だったそう。",
+      "reading": "ただし、AI利用料がかさみ、顧客によっては赤字だったそうです。",
       "highlight": [
         "赤字"
       ],
       "file": "voice/10.wav",
-      "seconds": 3.939
+      "seconds": 4.397
     },
     {
       "scene": "shadow",
@@ -128,7 +128,7 @@
         "無料"
       ],
       "file": "voice/11.wav",
-      "seconds": 3.416
+      "seconds": 3.352
     },
     {
       "scene": "outro",
@@ -138,7 +138,7 @@
         "何を任せますか？"
       ],
       "file": "voice/12.wav",
-      "seconds": 2.637
+      "seconds": 2.691
     },
     {
       "scene": "outro",
@@ -148,7 +148,7 @@
         "チャンネル登録"
       ],
       "file": "voice/13.wav",
-      "seconds": 4.131
+      "seconds": 3.885
     }
   ]
 }
