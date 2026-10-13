@@ -1,27 +1,34 @@
 {
+  "series": "🏢 注目の企業・人物",
   "title": "社員ゼロで売上15億円？AIに会社を回させた40歳",
   "source": "出典：WSJ（2026/7/29）ほか報道・本人発信｜数字は本人発表値｜1ドル=150円換算",
+  "voice": {
+    "name": "冥鳴ひまり",
+    "vvm": 1,
+    "styleId": 14,
+    "speed": 1.15
+  },
   "lines": [
     {
       "scene": "hook",
       "text": "社員ゼロ。顧客1万人。\n売上15億円。",
-      "reading": "社員ゼロ。顧客いちまんにん。売上じゅうごおくえん。",
+      "reading": "社員ゼロ。顧客1万人。売上15億円。",
       "highlight": [
         "社員ゼロ",
         "15億円"
       ],
       "file": "voice/00.wav",
-      "seconds": 3.278
+      "seconds": 3.501
     },
     {
       "scene": "hook",
       "text": "たった1人でAI会社を回す\n40歳が、いま海外で話題です。",
-      "reading": "たった一人で、エーアイ会社を回す、よんじゅっさいが、いま海外で話題です。",
+      "reading": "たった一人でAI会社を回す40歳が、いま海外で話題です。",
       "highlight": [
         "たった1人"
       ],
       "file": "voice/01.wav",
-      "seconds": 4.841
+      "seconds": 4.301
     },
     {
       "scene": "who",
@@ -31,59 +38,59 @@
         "ベン・ブロカ"
       ],
       "file": "voice/02.wav",
-      "seconds": 1.954
+      "seconds": 2.285
     },
     {
       "scene": "who",
       "text": "それまで作ったAIソフトは、\nどれも鳴かず飛ばずでした。",
-      "reading": "それまで作ったエーアイソフトは、どれも、鳴かず飛ばずでした。",
+      "reading": "それまで作ったAIソフトは、どれも鳴かず飛ばずでした。",
       "highlight": [
         "鳴かず飛ばず"
       ],
       "file": "voice/03.wav",
-      "seconds": 3.736
+      "seconds": 3.437
     },
     {
       "scene": "launch",
       "text": "2025年12月、\n彼が公開したのが「Polsia」。",
-      "reading": "にせんにじゅうごねん、じゅうにがつ。彼が公開したのが、ポルシア。",
+      "reading": "2025年12月。彼が公開したのが、ポルシア。",
       "highlight": [
         "Polsia"
       ],
       "file": "voice/04.wav",
-      "seconds": 4.332
+      "seconds": 4.088
     },
     {
       "scene": "launch",
       "text": "AIが事業の立ち上げから\n運営まで代行するサービスです。",
-      "reading": "エーアイが、事業の立ち上げから、運営まで、代行するサービスです。",
+      "reading": "AIが、事業の立ち上げから運営まで、代行するサービスです。",
       "highlight": [
         "立ち上げから",
         "運営まで"
       ],
       "file": "voice/05.wav",
-      "seconds": 4.477
+      "seconds": 4.323
     },
     {
       "scene": "growth",
       "text": "公開から約半年で、\n評価額は約375億円に。",
-      "reading": "公開から約半年で、評価額は、約、さんびゃくななじゅうごおくえんに。",
+      "reading": "公開から約半年で、評価額は約375億円に。",
       "highlight": [
         "約375億円"
       ],
       "file": "voice/06.wav",
-      "seconds": 4.877
+      "seconds": 4.163
     },
     {
       "scene": "growth",
       "text": "7月には有料顧客1万人。\n今年の売上は約15億円の\n見込みと報じられました。",
-      "reading": "しちがつには、有料顧客いちまんにん。今年の売上は、約じゅうごおくえんの見込みと、報じられました。",
+      "reading": "7月には有料顧客1万人。今年の売上は、約15億円の見込みと報じられました。",
       "highlight": [
         "1万人",
         "約15億円"
       ],
       "file": "voice/07.wav",
-      "seconds": 6.621
+      "seconds": 6.051
     },
     {
       "scene": "how",
@@ -91,57 +98,57 @@
       "reading": "メール返信、コード修正、問い合わせ、返金処理まで。",
       "highlight": [],
       "file": "voice/08.wav",
-      "seconds": 4.023
+      "seconds": 4.109
     },
     {
       "scene": "how",
       "text": "ぜんぶAIが担当。\n社員は彼1人だけです。",
-      "reading": "ぜんぶ、エーアイが担当。社員は、彼ひとりだけです。",
+      "reading": "全部AIが担当。社員は、彼一人だけです。",
       "highlight": [
         "ぜんぶAI"
       ],
       "file": "voice/09.wav",
-      "seconds": 3.802
+      "seconds": 3.437
     },
     {
       "scene": "shadow",
       "text": "ただし、AIの利用料がかさみ、\n赤字になる顧客も。",
-      "reading": "ただし。エーアイの利用料がかさみ、赤字になる顧客も。",
+      "reading": "ただし、AIの利用料がかさみ、赤字になる顧客も。",
       "highlight": [
         "赤字"
       ],
       "file": "voice/10.wav",
-      "seconds": 3.771
+      "seconds": 3.939
     },
     {
       "scene": "shadow",
       "text": "いまは無料の\nオープンソースAIに\n切り替えたといいます。",
-      "reading": "いまは、無料のオープンソースエーアイに、切り替えたといいます。",
+      "reading": "いまは、無料のオープンソースAIに切り替えたといいます。",
       "highlight": [
         "無料"
       ],
       "file": "voice/11.wav",
-      "seconds": 3.606
+      "seconds": 3.416
     },
     {
       "scene": "outro",
       "text": "あなたなら、\nAIに何を任せますか？",
-      "reading": "あなたなら、エーアイに、何を任せますか？",
+      "reading": "あなたなら、AIに何を任せますか？",
       "highlight": [
         "何を任せますか？"
       ],
       "file": "voice/12.wav",
-      "seconds": 2.843
+      "seconds": 2.637
     },
     {
       "scene": "outro",
-      "text": "海外のAIトレンドを紹介中。\nチャンネル登録してね！",
-      "reading": "海外のエーアイトレンドを、紹介中。チャンネル登録してね！",
+      "text": "注目の企業と人物を紹介中。\nチャンネル登録してね！",
+      "reading": "注目の企業と人物を紹介しています。チャンネル登録してね！",
       "highlight": [
         "チャンネル登録"
       ],
       "file": "voice/13.wav",
-      "seconds": 3.939
+      "seconds": 4.131
     }
   ]
 }

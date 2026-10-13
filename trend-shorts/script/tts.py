@@ -1,24 +1,38 @@
-"""Generate narration wavs with Open JTalk (pyopenjtalk) and write src/timeline.json."""
-import json, pathlib, numpy as np, pyopenjtalk, scipy.io.wavfile as wf
+"""Generate narration wavs with VOICEVOX CORE and write src/timeline.json.
+
+VOICEVOX_DIR must contain the *.vvm voice models and the voicevox_onnxruntime
+folder (see README). The Open JTalk dictionary bundled with pyopenjtalk-plus is reused.
+"""
+import io, json, os, pathlib, wave
+import pyopenjtalk
+from voicevox_core.blocking import Onnxruntime, OpenJtalk, Synthesizer, VoiceModelFile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SPEED = 1.25
-GAP = 0.15  # seconds of silence after each line
+VV = pathlib.Path(os.environ.get("VOICEVOX_DIR", ROOT / "voicevox"))
+GAP = 0.12  # seconds of silence after each line
 
 script = json.loads((ROOT / "script/script.json").read_text())
+voice = script["voice"]
+ort = Onnxruntime.load_once(filename=str(next(VV.glob("voicevox_onnxruntime-*/lib/libvoicevox_onnxruntime.so.*.*"))))
+synth = Synthesizer(ort, OpenJtalk(os.path.join(os.path.dirname(pyopenjtalk.__file__), "dictionary")))
+with VoiceModelFile.open(VV / f"{voice['vvm']}.vvm") as model:
+    synth.load_voice_model(model)
+
 out = ROOT / "public/voice"
 out.mkdir(parents=True, exist_ok=True)
 lines = []
 for i, line in enumerate(script["lines"]):
-    wav, sr = pyopenjtalk.tts(line["reading"], speed=SPEED)
-    wav = wav / max(1.0, np.abs(wav).max()) * 0.9 * 32767 if np.abs(wav).max() > 32767 * 0.9 else wav
-    idx = np.where(np.abs(wav) > 300)[0]
-    pad = int(0.04 * sr)
-    wav = wav[max(0, idx[0] - pad): idx[-1] + pad]
+    query = synth.create_audio_query(line["reading"], voice["styleId"])
+    query.speed_scale = voice["speed"]
+    query.volume_scale = 1.8
+    query.pre_phoneme_length = 0.05
+    query.post_phoneme_length = 0.05
+    data = synth.synthesis(query, voice["styleId"])
+    with wave.open(io.BytesIO(data)) as w:
+        seconds = w.getnframes() / w.getframerate()
     name = f"{i:02d}.wav"
-    wf.write(out / name, sr, wav.astype(np.int16))
-    lines.append({**line, "file": f"voice/{name}", "seconds": round(len(wav) / sr + GAP, 3)})
+    (out / name).write_bytes(data)
+    lines.append({**line, "file": f"voice/{name}", "seconds": round(seconds + GAP, 3)})
 script["lines"] = lines
-(ROOT / "src/timeline.json").write_text(json.dumps(script, ensure_ascii=False, indent=2))
+(ROOT / "src/timeline.json").write_text(json.dumps(script, ensure_ascii=False, indent=2) + "\n")
 print(f"total {sum(l['seconds'] for l in lines):.1f}s")
-for l in lines: print(l["seconds"], l["text"])

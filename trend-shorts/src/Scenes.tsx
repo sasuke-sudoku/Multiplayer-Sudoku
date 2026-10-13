@@ -56,38 +56,51 @@ const Hook: React.FC<{ s: SceneTiming }> = ({ s }) => (
   </Stage>
 );
 
+const ProfileRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+  <div style={{ display: "flex", gap: 20, fontSize: 40, lineHeight: 1.45 }}>
+    <span style={{ color: colors.muted, fontWeight: 700, width: 110, flexShrink: 0 }}>{label}</span>
+    <span style={{ color: colors.text, fontWeight: 900 }}>{value}</span>
+  </div>
+);
+
 const Who: React.FC<{ s: SceneTiming }> = ({ s }) => {
   const t = s.lines[1].from;
   return (
     <Stage>
-      <Pop start={0}>
-        <div
-          style={{
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background: `linear-gradient(135deg, ${colors.accent2}, #5b5bff)`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 170,
-          }}
-        >
-          👨‍💻
-        </div>
-      </Pop>
-      <Pop start={6}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 96, fontWeight: 900, color: colors.text }}>Ben Broca</div>
-          <div style={{ fontSize: 48, fontWeight: 700, color: colors.muted }}>40歳・起業家</div>
-        </div>
+      <Pop start={0} style={{ width: "100%" }}>
+        <Card style={{ padding: "34px 36px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 30, marginBottom: 20 }}>
+            <div
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: "50%",
+                background: `linear-gradient(135deg, ${colors.accent2}, #5b5bff)`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 90,
+                flexShrink: 0,
+              }}
+            >
+              👨‍💻
+            </div>
+            <div>
+              <div style={{ fontSize: 34, fontWeight: 700, color: colors.accent }}>PROFILE</div>
+              <div style={{ fontSize: 78, fontWeight: 900, lineHeight: 1.1 }}>Ben Broca</div>
+            </div>
+          </div>
+          <ProfileRow label="年齢" value="40歳" />
+          <ProfileRow label="会社" value="Polsia（創業者）" />
+          <ProfileRow label="経歴" value="CloudKitchens／Hutch共同創業" />
+        </Card>
       </Pop>
       <div style={{ display: "flex", gap: 24 }}>
         {["AIソフト①", "AIソフト②", "AIソフト③"].map((name, i) => (
           <Pop key={name} start={t + 6 + i * 8}>
-            <Card style={{ padding: "18px 26px", textAlign: "center", position: "relative" }}>
-              <div style={{ fontSize: 38, fontWeight: 700, color: colors.muted }}>{name}</div>
-              <div style={{ fontSize: 80, fontWeight: 900, color: colors.danger, lineHeight: 1 }}>✕</div>
+            <Card style={{ padding: "16px 26px", textAlign: "center" }}>
+              <div style={{ fontSize: 36, fontWeight: 700, color: colors.muted }}>{name}</div>
+              <div style={{ fontSize: 72, fontWeight: 900, color: colors.danger, lineHeight: 1 }}>✕</div>
             </Card>
           </Pop>
         ))}

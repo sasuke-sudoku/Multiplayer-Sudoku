@@ -68,3 +68,5 @@ export const scenes: SceneTiming[] = (() => {
 
 export const title: string = timeline.title;
 export const source: string = timeline.source;
+export const series: string = timeline.series;
+export const voiceCredit = `VOICEVOX:${timeline.voice.name}`;

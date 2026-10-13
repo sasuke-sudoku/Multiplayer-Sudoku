@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { colors, fontFamily, source, title, TimedLine } from "./theme";
+import { colors, fontFamily, series, source, title, TimedLine, voiceCredit } from "./theme";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -84,7 +84,7 @@ export const Header: React.FC = () => {
           letterSpacing: 2,
         }}
       >
-        🌍 海外AIトレンド
+        {series}
       </div>
       <div
         style={{
@@ -166,6 +166,8 @@ export const SourceNote: React.FC = () => (
     }}
   >
     {source}
+    <br />
+    {voiceCredit}
   </div>
 );
 
