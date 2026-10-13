@@ -83,6 +83,8 @@ def main():
     ImageDraw.Draw(glow).ellipse([W * 0.62, H * 0.52, W * 0.62 + 260, H * 0.52 + 260], fill=(255, 225, 160, 255))
     img = Image.alpha_composite(img.convert("RGBA"), glow.filter(ImageFilter.GaussianBlur(18)))
     town(ImageDraw.Draw(img))
+    # Canva 取り込み用: 文字なしの背景（文字は Canva 側で編集できるテキストとして載せる）
+    img.convert("RGB").resize((1280, 720), Image.LANCZOS).save(os.path.join(HERE, "canva", "background.png"))
     img = title(img)
     frame = os.path.join(HERE, "frame.png")
     img.convert("RGB").save(frame)
