@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """参考画像（文字なし版）からサムネイル背景を作る: くっきり＋幻想的な仕上げ。
-使い方: python3 make_mystic_bg.py 参考画像.webp 出力.jpg"""
-import sys
+使い方:
+  python3 make_mystic_bg.py 参考画像 出力.jpg [--crop x0,y0,x1,y1] [--sun x,y] [--text x,y]
+  --crop 元画像から使う範囲（省略時は 1 枚目のスクショ右下の画像）
+  --sun  出力画像（1280x720）での夕日の位置
+  --text 出力画像でのタイトル文字の中心（この周りを暗いもやで囲む）"""
+import argparse
 
 import numpy as np
 from PIL import Image, ImageFilter
 
 W, H = 1280, 720
-SUN = (942, 313)            # 出力画像での夕日の位置
 rng = np.random.default_rng(7)
 
 
@@ -23,16 +26,18 @@ def screen(a, b):
     return 1 - (1 - a) * (1 - b)
 
 
-def main(src_path, out_path):
+def main(src_path, out_path, crop, SUN, TEXT, gap=200):
     src = Image.open(src_path).convert("RGB")
-    c = src.crop((673, 329, 1365, 785))                  # スクショ右下の文字なし画像
+    c = src.crop(crop)
     w, h = c.size
     nh = round(w * 9 / 16)
-    c = c.crop((0, 20, w, 20 + nh))
+    top = max(0, (h - nh) // 2) if h - nh < 40 else 20
+    c = c.crop((0, top, w, top + nh))
 
     # --- くっきり: 段階的に拡大し、ノイズを抑えてから細部と局所コントラストを強調
-    c = c.filter(ImageFilter.MedianFilter(3))
-    c = c.resize((c.width * 3 // 2, c.height * 3 // 2), Image.LANCZOS).filter(ImageFilter.UnsharpMask(1.2, 80, 2))
+    if W / c.width > 1.5:  # 大きく拡大するときだけノイズを抑えて 2 段階で拡大
+        c = c.filter(ImageFilter.MedianFilter(3))
+        c = c.resize((c.width * 3 // 2, c.height * 3 // 2), Image.LANCZOS).filter(ImageFilter.UnsharpMask(1.2, 80, 2))
     c = c.resize((W, H), Image.LANCZOS)
     c = c.filter(ImageFilter.UnsharpMask(radius=2.0, percent=110, threshold=3))     # 輪郭
     c = c.filter(ImageFilter.UnsharpMask(radius=24, percent=35, threshold=0))       # 局所コントラスト（霞を晴らす）
@@ -79,8 +84,9 @@ def main(src_path, out_path):
 
     # --- タイトルの後ろの深い茜〜紫のもや（白文字を浮かせる）
     mask = np.zeros((H, W), np.float32)
-    mask += 0.55 * np.exp(-(((xx - 640) / 430) ** 2 + ((yy - 230) / 150) ** 2))
-    mask += 0.5 * np.exp(-(((xx - 640) / 520) ** 2 + ((yy - 430) / 45) ** 2))
+    tx, ty = TEXT
+    mask += 0.55 * np.exp(-(((xx - tx) / 430) ** 2 + ((yy - ty) / 150) ** 2))
+    mask += 0.5 * np.exp(-(((xx - tx) / 520) ** 2 + ((yy - ty - gap) / 45) ** 2))
     mask = np.clip(mask, 0, 0.6)[..., None]
     a = a * (1 - mask) + np.array([0.30, 0.10, 0.12]) * mask
 
@@ -92,4 +98,13 @@ def main(src_path, out_path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    ap = argparse.ArgumentParser()
+    ap.add_argument("src")
+    ap.add_argument("out")
+    ap.add_argument("--crop", default="673,329,1365,785")
+    ap.add_argument("--sun", default="942,313")
+    ap.add_argument("--text", default="640,230")
+    ap.add_argument("--subtitle-gap", type=int, default=200)
+    ar = ap.parse_args()
+    nums = lambda s: tuple(int(v) for v in s.split(","))  # noqa: E731
+    main(ar.src, ar.out, nums(ar.crop), nums(ar.sun), nums(ar.text), ar.subtitle_gap)
