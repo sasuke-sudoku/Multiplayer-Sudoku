@@ -2,7 +2,7 @@
 """「夕凪通り」— 妖怪ウォッチ2「桜町」を参考にした、オリジナルの昭和ノスタルジー系フィールドBGM。
 
 原曲のメロディーは一切使っていません。参考にしたのは「設計思想」だけです:
-  * 複音ハーモニカ風のリード（2枚のリードを僅かにずらした“うなり”）で時代感を出す
+  * アルトリコーダー風のリード（素朴な息の音＋タンギングの“チフ”）で学校・昭和の時代感を出す
   * C メジャー中心、F → C/E → Dm7 → C のベース順次下降
   * Fm / Fm6 / A♭ などの同主短調からの借用和音で「明るさの中の一瞬の陰り」
   * ヨナ抜き（ド・レ・ミ・ソ・ラ）中心の口ずさめる旋律
@@ -194,6 +194,25 @@ def bass(m, dur, vel=0.8):
     return vel * out * adsr(n, 0.006, 0.12) / 1.6
 
 
+def recorder(m, dur, vel=0.8):
+    """アルトリコーダー風: 基音中心の柔らかい音 + 発音時のチフ（息の雑音）+ ごく浅いビブラート"""
+    n = int((dur + 0.06) * SR)
+    t = np.arange(n) / SR
+    f0 = hz(m)
+    cents = 14 * np.exp(-t / 0.025)                               # 吹き始めにわずかに上ずる
+    cents += 6 * np.clip((t - 0.4) / 0.4, 0, 1) * np.sin(2 * np.pi * 4.8 * t + rng.uniform(0, 6))
+    ph = 2 * np.pi * np.cumsum(f0 * 2 ** (cents / 1200)) / SR
+    env = adsr(n, 0.03, 0.05, sus_decay=0.05)
+    out = np.zeros(n)
+    for k, a in ((1, 1.0), (2, 0.10), (3, 0.16), (4, 0.03), (5, 0.04), (7, 0.01)):
+        if k * f0 < 12000:
+            out += a * env ** (1 + 0.15 * k) * np.sin(k * ph)
+    chiff = shaped_noise(n, 2 * f0, 7000) * np.exp(-t / 0.018)
+    air = shaped_noise(n, 1500, 6000) * env
+    out += 0.22 * chiff + 0.025 * air
+    return vel * out / 5.5
+
+
 def accordion(m, dur, vel=0.3):
     """アコーディオン風の持続和音（2列リードのミュゼット・チューニング）"""
     n = int((dur + 0.2) * SR)
@@ -202,10 +221,10 @@ def accordion(m, dur, vel=0.3):
     out = np.zeros(n)
     for detune in (0.0, 9.0):
         f0 = hz(m) * 2 ** (detune / 1200)
-        for k in range(1, 12):
-            if k * f0 > 6000:
+        for k in range(1, 8):
+            if k * f0 > 4000:
                 break
-            out += (1 / k ** 1.4) * np.sin(2 * np.pi * k * f0 * t + rng.uniform(0, 6))
+            out += (1 / k ** 1.9) * np.sin(2 * np.pi * k * f0 * t + rng.uniform(0, 6))
     return vel * env * out / 3
 
 
@@ -249,8 +268,8 @@ def woodblock(vel):
 
 # ---------------------------------------------------------------- 配置
 TRACKS = {k: np.zeros(int((LOOP_SEC + 4) * SR)) for k in
-          ("harmonica", "guitar", "bass", "accordion", "glock", "shaker", "brush", "wood")}
-MIDI_EVENTS = {k: [] for k in ("harmonica", "guitar", "bass", "accordion", "glock", "drums")}
+          ("lead", "guitar", "bass", "accordion", "glock", "shaker", "brush", "wood")}
+MIDI_EVENTS = {k: [] for k in ("lead", "guitar", "bass", "accordion", "glock", "drums")}
 
 
 def place(track, beat, sig):
@@ -315,7 +334,7 @@ def arrange():
             note("bass", b + 1.5, root + 7 if root + 7 <= midi("D3") else root - 5, 0.45, 0.5, bass)
         # --- アコーディオン: A' 以降に薄く
         if lvl >= 2:
-            av = {2: 0.16, 3: 0.24, 4: 0.2}[lvl]
+            av = {2: 0.10, 3: 0.14, 4: 0.12}[lvl]
             for v in voicing[1:]:
                 note("accordion", b, v, ln * 0.97, av, accordion)
         # --- 打楽器
@@ -343,7 +362,7 @@ def arrange():
                 if nm != "r":
                     m = midi(nm)
                     vel = 0.8 + 0.1 * (ln >= 1.5)
-                    note("harmonica", pos, m, ln * 0.96, vel, harmonica)
+                    note("lead", pos, m, ln * 0.92, vel, recorder)  # ハーモニカに戻す場合は harmonica
                     if lvl == 4 and ln >= 1:   # 最後の A'' は鉄琴で長い音をオクターブ上に重ねる
                         note("glock", pos, m + 12, ln, 0.16, glock)
                 pos += ln
@@ -380,16 +399,16 @@ def pan(x, p):  # p: -1 (左) .. +1 (右)
 
 def mix():
     mixdef = {  # 音量, 定位, リバーブ送り
-        "harmonica": (1.25, 0.05, 0.30),
+        "lead": (1.15, 0.05, 0.30),
         "guitar": (0.55, -0.35, 0.25),
         "bass": (0.42, 0.0, 0.05),
-        "accordion": (0.45, 0.40, 0.35),
+        "accordion": (0.28, 0.40, 0.35),
         "glock": (0.80, 0.30, 0.45),
         "shaker": (1.80, -0.50, 0.10),
         "brush": (1.40, 0.20, 0.15),
         "wood": (0.80, -0.25, 0.30),
     }
-    n = len(TRACKS["harmonica"])
+    n = len(TRACKS["lead"])
     dry = np.zeros((2, n))
     send = np.zeros(n)
     for k, (g, p, s) in mixdef.items():
@@ -434,7 +453,7 @@ def vlq(v):
 def write_midi(path):
     TPB = 480
     spec = {  # (チャンネル, GM 音色, トラック名)
-        "harmonica": (0, 22, "Harmonica (lead)"),
+        "lead": (0, 74, "Recorder (lead)"),
         "guitar": (1, 24, "Nylon Guitar"),
         "bass": (2, 32, "Acoustic Bass"),
         "accordion": (3, 21, "Accordion"),
