@@ -13,6 +13,9 @@ for b in "${REMOTION_BROWSER:-}" /opt/pw-browsers/chromium_headless_shell-*/chro
   if [ -n "$b" ] && [ -x "$b" ]; then BROWSER_ARGS=(--browser-executable="$b"); break; fi
 done
 
+# Each episode must differ from the recent ones (format, style, scene order). SKIP_VARIETY=1 to bypass.
+[ "${SKIP_VARIETY:-}" = 1 ] || python3 script/variety_check.py "$EP"
+
 VOICEVOX_DIR="${VOICEVOX_DIR:-$PWD/voicevox}" python3 script/tts.py "$EP"
 npx tsc --noEmit
 npx remotion render TrendShort "out/$SLUG.mp4" "${BROWSER_ARGS[@]}" --log=error

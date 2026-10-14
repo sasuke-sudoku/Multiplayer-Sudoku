@@ -11,10 +11,36 @@ export const HEIGHT = 1920;
 // Extra hold after the last line so the subscribe call can breathe.
 export const OUTRO_TAIL = 1.5 * FPS;
 
+// Per-episode look. Every option keeps the white, gradient-free base; they change accent, texture and motion.
+export const palettes = {
+  blue: { accent: "#0a5cff", fill: "#eef3ff", border: "#9db7f5", label: "#1d3b80" },
+  green: { accent: "#0a8f4e", fill: "#eaf7f0", border: "#8fd0ad", label: "#0d4d2e" },
+  orange: { accent: "#e2580b", fill: "#fff3e9", border: "#f4b88c", label: "#7a2f00" },
+  purple: { accent: "#6d28d9", fill: "#f3eeff", border: "#c3a8f3", label: "#3b1677" },
+  teal: { accent: "#0e7490", fill: "#e8f6f8", border: "#8fcbd6", label: "#134e5e" },
+} as const;
+
+export type EpisodeStyle = {
+  palette: keyof typeof palettes;
+  pattern: "grid" | "dots" | "stripes" | "plain";
+  motion: "pop" | "slide" | "zoom" | "wipe";
+  caption: "marker" | "box" | "underline";
+  header: "center" | "left";
+};
+export const style: EpisodeStyle = {
+  palette: "blue",
+  pattern: "grid",
+  motion: "pop",
+  caption: "marker",
+  header: "center",
+  ...((timeline as { style?: Partial<EpisodeStyle> }).style ?? {}),
+};
+const pal = palettes[style.palette];
+
 export const colors = {
   bg: "#ffffff",
-  accent: "#0a5cff",
-  accent2: "#0a5cff",
+  accent: pal.accent,
+  accent2: pal.accent,
   highlight: "#ffd400",
   danger: "#e8173b",
   text: "#111111",
@@ -22,9 +48,9 @@ export const colors = {
   card: "#f1f3f7",
   cardBorder: "#c4cad6",
   // Tinted card fills so the contents stand apart from the white background.
-  blueFill: "#eef3ff",
-  blueBorder: "#9db7f5",
-  blueLabel: "#1d3b80",
+  blueFill: pal.fill,
+  blueBorder: pal.border,
+  blueLabel: pal.label,
   redFill: "#fff0f2",
   redBorder: "#f2a1af",
   redLabel: "#9b1c33",
@@ -91,6 +117,11 @@ export type SceneData = {
   question: { question: string[]; questionHighlight: string; comment: string };
   bigtext: { kicker?: string; lines: string[]; highlight?: string; tone?: "blue" | "red" };
   versus: { before: Item; after: Item; arrow?: string };
+  ranking: { title: string; items: { label: string; value: string }[] };
+  quiz: { question: string; choices: string[]; answer: number; note?: string };
+  timeline: { events: { date: string; text: string; tone?: "blue" | "red" }[] };
+  quote: { quote: string; by: string; highlight?: string };
+  chart: { label: string; unit: string; points: { x: string; y: number }[] };
 };
 export type SceneDef = { [K in keyof SceneData]: { id: string; type: K; data: SceneData[K] } }[keyof SceneData];
 export const sceneDefs = timeline.scenes as SceneDef[];

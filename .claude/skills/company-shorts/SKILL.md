@@ -9,16 +9,39 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 見本は `trend-shorts/episodes/polsia.json`。
 
 ## 毎回そろえるもの（シリーズの統一感）
-- **見た目**: 白背景・グラデーションなし・薄い格子、青（良い情報）／赤（注意・マイナス）のカード、
-  黒文字＋黄色マーカーの字幕、上部に赤いシリーズラベルと2行タイトル。→ コード（`src/`）の配色・部品はそのまま使う。
-- **エフェクト**: ポップイン、数字のカウントアップ、赤いスタンプ、警告カードの揺れ、チャンネル登録ボタンの押下。
-  → シーンタイプに組み込み済み。新しい演出が必要なら同じ配色・動きの方向で追加する。
+- **土台の見た目**: 白背景・グラデーションなし・カード＋字幕。`src/` の部品を使い、配色は下のパレットから選ぶ。
 - **声**: VOICEVOX:青山龍星（vvm 15, styleId 13, speed 1.15）。
 - **ネタ選び**: 下の「題材の選び方」に従う。
 
-## 毎回自由に変えてよいもの
-- **構成**: シーンの数・順番・種類、行数、長さ（30〜60秒）は題材に合わせて決める。
-  見本と同じ7シーン構成にする必要はない。冒頭2〜3秒で「え？」と思わせ、最後は問いかけか登録の呼びかけで終える、だけ守る。
+## 毎回必ず変えるもの（常連さんを飽きさせない）
+同じ型が続くと飽きられる。**前回と「型」「スタイル」「シーン構成」のすべてを変える。**
+`scripts/build.sh` は `script/variety_check.py` で直近の回と比べ、似すぎていると止まる。
+
+### 1. 型（`format`）— 直近2回と違うものを選ぶ
+| format | 中身 | 向いているシーン例 |
+|---|---|---|
+| `story` | 挫折→転機→成功→影の物語 | profile, reveal, growth, warning |
+| `quiz` | 「何人で運営？」など問題→正解で驚かせる | quiz, timeline, versus |
+| `ranking` | 「〇〇な会社TOP3」で比べる | ranking, stats, bigtext |
+| `versus` | ふつうの会社 vs この会社 | versus, grid, chart |
+| `numbers` | 3つの数字で丸わかり | stats, chart, growth |
+| `quote` | 本人の言葉から入る（実際の発言のみ） | quote, timeline, bigtext |
+| `secrets` | 成功の理由を3つ | bigtext, grid, versus |
+| `contrarian` | 「実はやばい？」課題から入って評価する | warning, bigtext, chart |
+
+### 2. スタイル（`style`）— palette は前回と違うもの、5項目のうち3つ以上を前回から変える
+| キー | 選択肢 |
+|---|---|
+| `palette` | `blue` `green` `orange` `purple` `teal`（メインの色） |
+| `pattern` | `grid` `dots` `stripes` `plain`（背景の模様） |
+| `motion` | `pop` `slide` `zoom` `wipe`（シーンの切り替わり方） |
+| `caption` | `marker`（黄色マーカー） `box`（黒い帯） `underline`（下線） |
+| `header` | `center`（中央） `left`（左寄せ＋色帯） |
+
+### 3. シーン構成（`scenes`）
+- 最初のシーンの type を前回と変える。前回使っていない type を1つ以上入れる。
+- 直近3回とシーンの並びが50%以上一致しないようにする。
+- 長さは30〜60秒で自由。冒頭2〜3秒で「え？」と思わせ、最後は問いかけか登録の呼びかけで終える。
 
 ## 題材の選び方
 - 直近1〜2週間に海外または日本で話題になった企業・人物。`episodes/` の既存回と重複しない。
@@ -31,7 +54,8 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 - 円換算は1ドル=150円で統一し、概要欄に書く。裏付けが取れない話は断定しないか使わない。出典は画面に出さず概要欄へ。
 
 ## エピソードJSON
-- `series`, `title`（「？」で2行に分かれる。各行15文字以内）, `description`（概要欄。VOICEVOXクレジットは自動付与）,
+- `date`（YYYY-MM-DD）, `format`, `style`（上の表）
+- `series`（シリーズ名。型に合わせて変えてよい。例: 🧠 企業クイズ）, `title`（「？」で2行に分かれる。各行15文字以内）, `description`（概要欄。VOICEVOXクレジットは自動付与）,
   `voice`, `images`（`founder`・`logo`・`site`、空欄可）
 - `scenes`: `{ "id", "type", "data" }` の配列。好きな順・好きな数で並べる。同じ type を何度使ってもよい。
 - `lines`: ナレーション。`scene`（scenes の id）、`text`（字幕。`\n` で改行、1行15文字以内）、
@@ -50,11 +74,18 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 | `grid` | 仕組み・要素を4つ並べて最後にスタンプ | `tasks[]`, `taskTag`, `stamp` |
 | `warning` | 課題・リスク → その後 | `header`, `warnLabel`, `warn`, `after`, `afterHighlight` |
 | `question` | 視聴者への問いかけ＋登録ボタン | `question[]`, `questionHighlight`, `comment` |
+| `ranking` | 3〜4位までのランキング（下位から順に出る） | `title`, `items[{label,value}]`（1位が先頭） |
+| `quiz` | 選択肢クイズ。2行目で正解を表示 | `question`, `choices[]`, `answer`（0始まり）, `note` |
+| `timeline` | 年表。点と線が伸びていく | `events[{date,text,tone}]` |
+| `quote` | 発言を1文字ずつ表示（実際の発言のみ） | `quote`, `by`, `highlight` |
+| `chart` | 折れ線グラフが伸びる | `label`, `unit`, `points[{x,y}]` |
 数値は "約375億円" のように書くとカウントアップする。`tone: "red"` で赤系。
+見本: `episodes/polsia.json`（story型）、`examples/polsia-quiz.json`（quiz型・同じ題材を別の型で作った例）。
 
 ## 手順
 1. 題材を選ぶ（候補3つ→1つに決める）。WebSearch で事実確認。
-2. 構成を決めて `episodes/<slug>.json` を書く。
+2. `episodes/` の直近の回の `format`・`style`・`scenes` を確認し、すべて変えた構成を決めて `episodes/<slug>.json` を書く。
+   `python3 script/variety_check.py episodes/<slug>.json` が OK になるまで直す。
 3. ビルド:
    ```bash
    cd trend-shorts

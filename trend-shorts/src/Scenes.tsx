@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { Card, CountUp, Pop, Tag, usePop } from "./parts";
 import { colors, images, SceneData, SceneTiming } from "./theme";
 
@@ -439,6 +439,223 @@ const Versus: React.FC<SceneProps<"versus">> = ({ s, d: v }) => {
   );
 };
 
+const Ranking: React.FC<SceneProps<"ranking">> = ({ s, d: v }) => {
+  // Count down: the last item (rank 1) appears last and biggest.
+  const at = stagger(s, v.items.length, 6);
+  const n = v.items.length;
+  return (
+    <Stage>
+      <Pop start={0}>
+        <Tag style={{ fontSize: 46 }}>{v.title}</Tag>
+      </Pop>
+      {v.items.map((item, i) => {
+        const rank = i + 1;
+        const top = rank === 1;
+        return (
+          <Pop key={item.label} start={at(n - 1 - i)} style={{ width: "100%" }}>
+            <Card
+              tone={top ? "red" : "blue"}
+              style={{ display: "flex", alignItems: "center", gap: 28, padding: top ? "26px 36px" : "16px 36px" }}
+            >
+              <div
+                style={{
+                  width: top ? 110 : 84,
+                  height: top ? 110 : 84,
+                  borderRadius: "50%",
+                  background: top ? colors.danger : colors.accent,
+                  color: "#fff",
+                  fontSize: top ? 64 : 48,
+                  fontWeight: 900,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {rank}
+              </div>
+              <div style={{ flex: 1, fontSize: top ? 56 : 46, fontWeight: 900 }}>{item.label}</div>
+              <div style={{ fontSize: top ? 60 : 46, fontWeight: 900, color: top ? colors.danger : colors.accent }}>
+                {item.value}
+              </div>
+            </Card>
+          </Pop>
+        );
+      })}
+    </Stage>
+  );
+};
+
+const Quiz: React.FC<SceneProps<"quiz">> = ({ s, d: v }) => {
+  const frame = useCurrentFrame();
+  const reveal = s.lines.length > 1 ? secondLine(s) : Math.floor(s.lines[0].duration * 0.6);
+  const shown = frame >= reveal;
+  const labels = ["A", "B", "C", "D"];
+  return (
+    <Stage>
+      <Pop start={0}>
+        <div style={{ fontSize: 46, fontWeight: 900, color: colors.danger, textAlign: "center" }}>Q.</div>
+      </Pop>
+      <Pop start={2}>
+        <div style={{ fontSize: 70, fontWeight: 900, textAlign: "center", lineHeight: 1.3, whiteSpace: "pre-line" }}>
+          {v.question}
+        </div>
+      </Pop>
+      {v.choices.map((choice, i) => {
+        const correct = i === v.answer;
+        return (
+          <Pop key={choice} start={10 + i * 8} style={{ width: "100%" }}>
+            <Card
+              tone={shown && correct ? "red" : "blue"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 24,
+                padding: "16px 32px",
+                opacity: shown && !correct ? 0.35 : 1,
+                borderColor: shown && correct ? colors.danger : undefined,
+              }}
+            >
+              <Tag tone={shown && correct ? "red" : "blue"} style={{ fontSize: 40 }}>
+                {labels[i]}
+              </Tag>
+              <span style={{ fontSize: 52, fontWeight: 900 }}>{choice}</span>
+              {shown && correct ? <span style={{ marginLeft: "auto", fontSize: 60, color: colors.danger }}>◎</span> : null}
+            </Card>
+          </Pop>
+        );
+      })}
+      {v.note ? (
+        <Pop start={reveal + 8}>
+          <div style={{ fontSize: 44, fontWeight: 900, color: colors.muted }}>{v.note}</div>
+        </Pop>
+      ) : null}
+    </Stage>
+  );
+};
+
+const Timeline: React.FC<SceneProps<"timeline">> = ({ s, d: v }) => {
+  const frame = useCurrentFrame();
+  const total = s.lines.reduce((sum, l) => sum + l.duration, 0);
+  const at = (i: number) => 4 + Math.floor((i * (total - 20)) / Math.max(1, v.events.length));
+  const lineHeight = interpolate(frame, [0, total - 10], [0, 100], clamp);
+  return (
+    <Stage>
+      <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column", gap: 26 }}>
+        <div
+          style={{
+            position: "absolute",
+            left: 34,
+            top: 20,
+            width: 8,
+            height: `calc(${lineHeight}% - 40px)`,
+            background: colors.accent,
+            borderRadius: 4,
+          }}
+        />
+        {v.events.map((ev, i) => (
+          <Pop key={ev.date + i} start={at(i)} style={{ display: "flex", alignItems: "center", gap: 30 }}>
+            <div
+              style={{
+                width: 76,
+                height: 76,
+                borderRadius: "50%",
+                background: ev.tone === "red" ? colors.danger : colors.accent,
+                border: "8px solid #fff",
+                boxShadow: "0 0 0 3px rgba(17,17,17,0.1)",
+                flexShrink: 0,
+                zIndex: 1,
+              }}
+            />
+            <Card tone={ev.tone ?? "blue"} style={{ flex: 1, padding: "16px 28px" }}>
+              <div style={{ fontSize: 36, fontWeight: 900, color: ev.tone === "red" ? colors.redLabel : colors.blueLabel }}>
+                {ev.date}
+              </div>
+              <div style={{ fontSize: 48, fontWeight: 900 }}>{ev.text}</div>
+            </Card>
+          </Pop>
+        ))}
+      </div>
+    </Stage>
+  );
+};
+
+const Quote: React.FC<SceneProps<"quote">> = ({ s, d: v }) => {
+  const frame = useCurrentFrame();
+  const chars = Math.floor(interpolate(frame, [6, Math.max(20, s.lines[0].duration - 6)], [0, v.quote.length], clamp));
+  return (
+    <Stage>
+      <div style={{ fontSize: 260, fontWeight: 900, color: colors.accent, lineHeight: 0.6, alignSelf: "flex-start" }}>“</div>
+      <div
+        style={{
+          fontSize: 76,
+          fontWeight: 900,
+          lineHeight: 1.4,
+          whiteSpace: "pre-line",
+          textAlign: "center",
+          minHeight: 320,
+        }}
+      >
+        {highlightIn(v.quote.slice(0, chars), v.highlight ?? "", colors.accent)}
+      </div>
+      <Pop start={Math.max(20, s.lines[0].duration - 6)}>
+        <div style={{ fontSize: 46, fontWeight: 900, color: colors.muted }}>— {v.by}</div>
+      </Pop>
+    </Stage>
+  );
+};
+
+const Chart: React.FC<SceneProps<"chart">> = ({ s, d: v }) => {
+  const frame = useCurrentFrame();
+  const W = 880;
+  const H = 440;
+  const max = Math.max(...v.points.map((p) => p.y)) * 1.1;
+  const xy = v.points.map((p, i) => [40 + (i * (W - 80)) / Math.max(1, v.points.length - 1), H - 40 - (p.y / max) * (H - 80)]);
+  const path = xy.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join(" ");
+  const progress = interpolate(frame, [4, Math.max(30, s.lines[0].duration)], [0, 1], {
+    ...clamp,
+    easing: Easing.inOut(Easing.cubic),
+  });
+  const last = v.points[v.points.length - 1];
+  return (
+    <Stage>
+      <Pop start={0}>
+        <Tag style={{ fontSize: 44 }}>{v.label}</Tag>
+      </Pop>
+      <Card style={{ padding: 20 }}>
+        <svg width={W} height={H}>
+          <path d={`M40,${H - 40} H${W - 40}`} stroke={colors.cardBorder} strokeWidth={4} />
+          <path
+            d={path}
+            fill="none"
+            stroke={colors.accent}
+            strokeWidth={12}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={1 - progress}
+          />
+          {xy.map(([x, y], i) => (
+            <g key={i} opacity={progress >= i / Math.max(1, xy.length - 1) ? 1 : 0}>
+              <circle cx={x} cy={y} r={14} fill={i === xy.length - 1 ? colors.danger : colors.accent} />
+              <text x={x} y={H - 6} fontSize={30} fontWeight={700} textAnchor="middle" fill={colors.muted}>
+                {v.points[i].x}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </Card>
+      <Pop start={Math.max(30, s.lines[0].duration)}>
+        <div style={{ fontSize: 100, fontWeight: 900, color: colors.danger }}>
+          {last.y.toLocaleString("ja-JP")}
+          {v.unit}
+        </div>
+      </Pop>
+    </Stage>
+  );
+};
+
 // Scene types an episode can combine in any order (episode.scenes[].type).
 export const sceneComponents: { [K in keyof SceneData]: React.FC<SceneProps<K>> } = {
   stats: Hook,
@@ -450,4 +667,9 @@ export const sceneComponents: { [K in keyof SceneData]: React.FC<SceneProps<K>> 
   question: Outro,
   bigtext: BigText,
   versus: Versus,
+  ranking: Ranking,
+  quiz: Quiz,
+  timeline: Timeline,
+  quote: Quote,
+  chart: Chart,
 };

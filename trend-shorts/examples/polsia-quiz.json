@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-14",
+  "format": "quiz",
+  "series": "🧠 企業クイズ",
+  "title": "社員は何人？AI会社の正体",
+  "description": "社員ゼロで売上15億円見込み？AIに会社を回させた40歳、ベン・ブロカ氏と「Polsia」を紹介します。\n\n■ 数字について\n売上・顧客数などは本人・会社の発表に基づく報道の数字で、第三者による確認はしていません。\n「売上15億円」は2026年の売上見込み、「約375億円」は売上ではなく企業評価額です。円換算は1ドル＝150円です。\n\n■ 主な出典\n・The Wall Street Journal「The Rise of Million-Dollar Companies With Just One Employee」（2026年7月29日）\n・Yahoo Finance / Moneywise ほか関連報道\n・Ben Broca 氏の公開発信\n\n#AI #起業 #ショート",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "style": {
+    "palette": "green",
+    "pattern": "dots",
+    "motion": "slide",
+    "caption": "box",
+    "header": "left"
+  },
+  "scenes": [
+    {
+      "id": "q",
+      "type": "quiz",
+      "data": {
+        "question": "売上見込み15億円の\nAI会社。社員は何人？",
+        "choices": [
+          "100人",
+          "10人",
+          "0人"
+        ],
+        "answer": 2,
+        "note": "創業者ひとりだけ"
+      }
+    },
+    {
+      "id": "t",
+      "type": "timeline",
+      "data": {
+        "events": [
+          {
+            "date": "〜2025",
+            "text": "AIソフトが連続不発",
+            "tone": "red"
+          },
+          {
+            "date": "2025.12",
+            "text": "Polsia 公開"
+          },
+          {
+            "date": "2026.5",
+            "text": "評価額 約375億円"
+          },
+          {
+            "date": "2026.7",
+            "text": "有料顧客 1万人"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vs",
+      "type": "versus",
+      "data": {
+        "before": {
+          "label": "ふつうの会社",
+          "value": "人が分担"
+        },
+        "after": {
+          "label": "Polsia",
+          "value": "AIが担当",
+          "tone": "red"
+        },
+        "arrow": "VS"
+      }
+    },
+    {
+      "id": "w",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ ただし",
+        "warnLabel": "AI利用料がかさみ…（本人談）",
+        "warn": "一部顧客で赤字",
+        "after": "無料のオープンソースAIへ",
+        "afterHighlight": "無料"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "あなたの仕事、",
+          "AIに任せられる？"
+        ],
+        "questionHighlight": "AIに任せられる？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "q",
+      "text": "売上見込み15億円の\nAI会社。社員は何人？",
+      "reading": "クイズです。売上見込み15億円のAI会社。社員は何人でしょう？",
+      "highlight": [
+        "社員は何人？"
+      ]
+    },
+    {
+      "scene": "q",
+      "text": "正解はゼロ人。\n創業者ひとりだけです。",
+      "reading": "正解は、ゼロ人。創業者ひとりだけです。",
+      "highlight": [
+        "ゼロ人"
+      ]
+    },
+    {
+      "scene": "t",
+      "text": "過去のAIソフトは\n鳴かず飛ばず。",
+      "reading": "彼、ベン・ブロカが過去に作ったAIソフトは、鳴かず飛ばず。",
+      "highlight": [
+        "鳴かず飛ばず"
+      ]
+    },
+    {
+      "scene": "t",
+      "text": "Polsia公開から半年で\n評価額は約375億円。",
+      "reading": "ところが、ポルシアを公開すると、半年で評価額は約375億円に。",
+      "highlight": [
+        "約375億円"
+      ]
+    },
+    {
+      "scene": "t",
+      "text": "7月には有料顧客\n1万人と報じられました。",
+      "reading": "7月には、有料顧客1万人と報じられました。",
+      "highlight": [
+        "1万人"
+      ]
+    },
+    {
+      "scene": "vs",
+      "text": "メール返信も返金処理も、\nふつうは人の仕事。",
+      "reading": "メール返信も返金処理も、ふつうは人の仕事。",
+      "highlight": []
+    },
+    {
+      "scene": "vs",
+      "text": "それをぜんぶ\nAIが担当しています。",
+      "reading": "それを全部、AIが担当しています。",
+      "highlight": [
+        "AIが担当"
+      ]
+    },
+    {
+      "scene": "w",
+      "text": "ただ、AI利用料で\n赤字の顧客もいたそう。",
+      "reading": "ただ、AIの利用料で、赤字になる顧客もいたそうです。",
+      "highlight": [
+        "赤字"
+      ]
+    },
+    {
+      "scene": "w",
+      "text": "いまは無料の\nオープンソースAIへ。",
+      "reading": "いまは、無料のオープンソースAIに切り替えたといいます。",
+      "highlight": [
+        "無料"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "あなたの仕事、\nAIに任せられますか？",
+      "reading": "あなたの仕事、AIに任せられますか？",
+      "highlight": [
+        "AIに任せられますか？"
+      ]
+    }
+  ]
+}

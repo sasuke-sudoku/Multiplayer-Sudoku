@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { colors, fontFamily, series, title, TimedLine } from "./theme";
+import { colors, fontFamily, series, style, title, TimedLine } from "./theme";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -35,24 +35,80 @@ export const CountUp: React.FC<{ start: number; to: number; duration?: number; d
   return <>{v.toLocaleString("ja-JP", { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}</>;
 };
 
+const svgUrl = (svg: string) => `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+const patterns: Record<string, { image: string; size: number } | null> = {
+  grid: {
+    image: svgUrl('<svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><path d="M0 1H90M1 0V90" stroke="rgba(0,0,0,0.05)" stroke-width="2"/></svg>'),
+    size: 90,
+  },
+  dots: {
+    image: svgUrl('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="4" fill="rgba(0,0,0,0.08)"/></svg>'),
+    size: 60,
+  },
+  stripes: {
+    image: svgUrl('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><path d="M-20 100L100 -20M-60 60L60 -60M20 140L140 20" stroke="rgba(0,0,0,0.04)" stroke-width="16"/></svg>'),
+    size: 80,
+  },
+  plain: null,
+};
+
 export const Background: React.FC = () => {
   const frame = useCurrentFrame();
+  const pattern = patterns[style.pattern];
   return (
     <AbsoluteFill style={{ backgroundColor: colors.bg }}>
-      <AbsoluteFill
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.03) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,0.03) 2px, transparent 2px)",
-          backgroundSize: "90px 90px",
-          backgroundPosition: `0px ${(frame * 1.5) % 90}px`,
-        }}
-      />
+      {pattern ? (
+        <AbsoluteFill
+          style={{
+            backgroundImage: pattern.image,
+            backgroundSize: `${pattern.size}px ${pattern.size}px`,
+            backgroundPosition: `0px ${(frame * 1.5) % pattern.size}px`,
+          }}
+        />
+      ) : null}
     </AbsoluteFill>
   );
 };
 
+// How each scene enters (style.motion).
+export const SceneEnter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const frame = useCurrentFrame();
+  const e = interpolate(frame, [0, 10], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const byType: Record<string, React.CSSProperties> = {
+    pop: { opacity: e, scale: String(0.94 + 0.06 * e) },
+    slide: { translate: `${(1 - e) * 1080}px 0px` },
+    zoom: { opacity: e, scale: String(1.18 - 0.18 * e) },
+    wipe: { clipPath: `inset(0 ${(1 - e) * 100}% 0 0)` },
+  };
+  return <AbsoluteFill style={byType[style.motion]}>{children}</AbsoluteFill>;
+};
+
 export const Header: React.FC = () => {
   const p = usePop(0);
+  const [q, rest] = [title.split("？")[0], title.split("？")[1]];
+  if (style.header === "left") {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 120,
+          left: 80,
+          right: 80,
+          borderLeft: `14px solid ${colors.accent}`,
+          paddingLeft: 30,
+          opacity: p,
+          translate: `${(1 - p) * -60}px 0px`,
+        }}
+      >
+        <div style={{ color: colors.danger, fontSize: 38, fontWeight: 900, letterSpacing: 2 }}>{series}</div>
+        <div style={{ color: colors.text, fontSize: 60, fontWeight: 900, lineHeight: 1.25 }}>
+          {q}？
+          <br />
+          <span style={{ color: colors.accent }}>{rest}</span>
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       style={{
@@ -90,12 +146,18 @@ export const Header: React.FC = () => {
           lineHeight: 1.25,
         }}
       >
-        {title.split("？")[0]}？
+        {q}？
         <br />
-        <span style={{ color: colors.accent }}>{title.split("？")[1]}</span>
+        <span style={{ color: colors.accent }}>{rest}</span>
       </div>
     </div>
   );
+};
+
+const highlightStyle: Record<string, React.CSSProperties> = {
+  marker: { background: colors.highlight, padding: "0 8px", borderRadius: 8 },
+  box: { color: colors.highlight },
+  underline: { color: colors.accent, textDecoration: `underline 10px ${colors.highlight}`, textUnderlineOffset: 10 },
 };
 
 const renderHighlighted = (text: string, highlight: string[]) => {
@@ -103,7 +165,7 @@ const renderHighlighted = (text: string, highlight: string[]) => {
   const pattern = new RegExp(`(${highlight.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`);
   return text.split(pattern).map((part, i) =>
     highlight.includes(part) ? (
-      <span key={i} style={{ background: colors.highlight, padding: "0 8px", borderRadius: 8 }}>
+      <span key={i} style={highlightStyle[style.caption]}>
         {part}
       </span>
     ) : (
@@ -130,7 +192,10 @@ export const Caption: React.FC<{ line: TimedLine }> = ({ line }) => {
     >
       <div
         style={{
-          color: colors.text,
+          color: style.caption === "box" ? "#fff" : colors.text,
+          background: style.caption === "box" ? "rgba(17,17,17,0.9)" : undefined,
+          padding: style.caption === "box" ? "14px 32px" : undefined,
+          borderRadius: 24,
           fontSize: 58,
           fontWeight: 900,
           lineHeight: 1.35,

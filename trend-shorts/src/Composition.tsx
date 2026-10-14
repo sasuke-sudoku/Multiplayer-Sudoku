@@ -1,7 +1,7 @@
 import { Audio } from "@remotion/media";
 import { useEffect, useState } from "react";
 import { AbsoluteFill, Composition, continueRender, delayRender, Sequence, staticFile } from "remotion";
-import { Background, Caption, Header } from "./parts";
+import { Background, Caption, Header, SceneEnter } from "./parts";
 import { sceneComponents } from "./Scenes";
 import { FPS, fontFamily, HEIGHT, lines, sceneDefs, scenes, totalFrames, WIDTH } from "./theme";
 
@@ -37,7 +37,9 @@ export const TrendShort: React.FC = () => {
         if (!Scene) throw new Error(`Unknown scene type "${def.type}"`);
         return (
           <Sequence key={i} name={`Scene: ${s.id} (${def.type})`} from={s.from} durationInFrames={s.duration}>
-            <Scene s={s} d={def.data} />
+            <SceneEnter>
+              <Scene s={s} d={def.data} />
+            </SceneEnter>
           </Sequence>
         );
       })}
