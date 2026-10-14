@@ -5,6 +5,7 @@
 
 - 作り方の手順（Claude Code のスキル）: `../.claude/skills/company-shorts/SKILL.md`
 - 別のプロンプトで新しい回を作るときの文面: `PROMPT.md`
+- 毎日のルーティン用の文面: `ROUTINE.md`
 - 投稿済みの回: `episodes/`（最新回の template 番号から次の番号が決まる）
 - テンプレート見本: `examples/template-01.json` 〜 `template-10.json`
 
