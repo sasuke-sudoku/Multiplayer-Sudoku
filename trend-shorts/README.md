@@ -13,7 +13,7 @@
 ```bash
 bash scripts/setup.sh                        # 初回のみ：npm・VOICEVOX（core / onnxruntime / 声）
 bash scripts/build.sh episodes/polsia.json   # ナレーション → 動画 → チェック画像 → 概要欄テキスト
-npx remotion studio                          # 最後にビルドした回をプレビュー
+npx remotion studio                          # 最後にビルドした回をプレビュー（先に build.sh が必要）
 ```
 
 出力は `out/` に入ります（`<slug>.mp4`、`<slug>-check.png`、`<slug>-description.txt`）。
