@@ -278,9 +278,9 @@ const How: React.FC<SceneProps<"grid">> = ({ s, d: v }) => {
     <Stage>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, width: "100%" }}>
         {tasks.map((task, i) => (
-          <Pop key={task} start={at(i)}>
-            <Card style={{ fontSize: 50, fontWeight: 900, textAlign: "center", padding: "30px 10px" }}>
-              {task}
+          <Pop key={task} start={at(i)} style={{ width: "100%" }}>
+            <Card style={{ fontSize: 50, fontWeight: 900, textAlign: "center", padding: "30px 10px", width: "100%" }}>
+              <div>{task}</div>
               <Tag style={{ fontSize: 38, marginTop: 12 }}>{v.taskTag}</Tag>
             </Card>
           </Pop>
@@ -582,7 +582,9 @@ const Timeline: React.FC<SceneProps<"timeline">> = ({ s, d: v }) => {
 
 const Quote: React.FC<SceneProps<"quote">> = ({ s, d: v }) => {
   const frame = useCurrentFrame();
-  const chars = Math.floor(interpolate(frame, [6, Math.max(20, s.lines[0].duration - 6)], [0, v.quote.length], clamp));
+  // Type the quote over the first 60% of the line, then show who said it.
+  const typeEnd = Math.max(20, Math.floor(s.lines[0].duration * 0.6));
+  const chars = Math.floor(interpolate(frame, [6, typeEnd], [0, v.quote.length], clamp));
   return (
     <Stage>
       <div style={{ fontSize: 260, fontWeight: 900, color: colors.accent, lineHeight: 0.6, alignSelf: "flex-start" }}>“</div>
@@ -598,7 +600,7 @@ const Quote: React.FC<SceneProps<"quote">> = ({ s, d: v }) => {
       >
         {highlightIn(v.quote.slice(0, chars), v.highlight ?? "", colors.accent)}
       </div>
-      <Pop start={Math.max(20, s.lines[0].duration - 6)}>
+      <Pop start={typeEnd + 2}>
         <div style={{ fontSize: 46, fontWeight: 900, color: colors.muted }}>— {v.by}</div>
       </Pop>
     </Stage>
@@ -612,7 +614,9 @@ const Chart: React.FC<SceneProps<"chart">> = ({ s, d: v }) => {
   const max = Math.max(...v.points.map((p) => p.y)) * 1.1;
   const xy = v.points.map((p, i) => [40 + (i * (W - 80)) / Math.max(1, v.points.length - 1), H - 40 - (p.y / max) * (H - 80)]);
   const path = xy.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join(" ");
-  const progress = interpolate(frame, [4, Math.max(30, s.lines[0].duration)], [0, 1], {
+  // Draw the line over the first 60% of the line's narration, then show the final value.
+  const drawEnd = Math.max(20, Math.floor(s.lines[0].duration * 0.6));
+  const progress = interpolate(frame, [4, drawEnd], [0, 1], {
     ...clamp,
     easing: Easing.inOut(Easing.cubic),
   });
@@ -646,7 +650,7 @@ const Chart: React.FC<SceneProps<"chart">> = ({ s, d: v }) => {
           ))}
         </svg>
       </Card>
-      <Pop start={Math.max(30, s.lines[0].duration)}>
+      <Pop start={drawEnd + 2}>
         <div style={{ fontSize: 100, fontWeight: 900, color: colors.danger }}>
           {last.y.toLocaleString("ja-JP")}
           {v.unit}
