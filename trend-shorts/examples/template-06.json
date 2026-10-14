@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-14",
+  "template": 6,
+  "title": "この一言？AI時代の起業家",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "q",
+      "type": "quote",
+      "data": {
+        "quote": "（ここに本人の\n実際の発言）",
+        "by": "Ben Broca",
+        "highlight": "実際の発言"
+      }
+    },
+    {
+      "id": "who",
+      "type": "profile",
+      "data": {
+        "name": "Ben Broca",
+        "emoji": "👨‍💻",
+        "rows": [
+          {
+            "label": "年齢",
+            "value": "40歳"
+          },
+          {
+            "label": "会社",
+            "value": "Polsia（創業者）"
+          }
+        ],
+        "chips": [],
+        "chipMark": ""
+      }
+    },
+    {
+      "id": "t",
+      "type": "timeline",
+      "data": {
+        "events": [
+          {
+            "date": "〜2025",
+            "text": "AIソフトが不発",
+            "tone": "red"
+          },
+          {
+            "date": "2025.12",
+            "text": "Polsia公開"
+          },
+          {
+            "date": "2026.7",
+            "text": "顧客1万人"
+          }
+        ]
+      }
+    },
+    {
+      "id": "risk",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ その裏で",
+        "warnLabel": "AI利用料がかさみ…（本人談）",
+        "warn": "一部顧客で赤字",
+        "after": "無料のオープンソースAIへ",
+        "afterHighlight": "無料"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "この言葉、",
+          "どう思う？"
+        ],
+        "questionHighlight": "どう思う？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "q",
+      "text": "ここに本人の\n実際の発言が入ります。",
+      "reading": "ここに本人の実際の発言が入ります。",
+      "highlight": [
+        "実際の発言"
+      ]
+    },
+    {
+      "scene": "who",
+      "text": "語ったのは\nベン・ブロカ。",
+      "reading": "語ったのはベン・ブロカ。",
+      "highlight": [
+        "ベン・ブロカ"
+      ]
+    },
+    {
+      "scene": "t",
+      "text": "不発続きから\n顧客1万人へ。",
+      "reading": "不発続きから顧客1万人へ。",
+      "highlight": [
+        "顧客1万人"
+      ]
+    },
+    {
+      "scene": "risk",
+      "text": "その裏では\n赤字の顧客も。",
+      "reading": "その裏では赤字の顧客も。",
+      "highlight": [
+        "赤字"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "この言葉、\nどう思いますか？",
+      "reading": "この言葉、どう思いますか？",
+      "highlight": [
+        "どう思いますか？"
+      ]
+    }
+  ]
+}

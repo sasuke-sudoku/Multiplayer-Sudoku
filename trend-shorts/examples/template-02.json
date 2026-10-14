@@ -1,6 +1,6 @@
 {
   "date": "2026-10-14",
-  "format": "quiz",
+  "template": 2,
   "series": "🧠 企業クイズ",
   "title": "社員は何人？AI会社の正体",
   "description": "社員ゼロで売上15億円見込み？AIに会社を回させた40歳、ベン・ブロカ氏と「Polsia」を紹介します。\n\n■ 数字について\n売上・顧客数などは本人・会社の発表に基づく報道の数字で、第三者による確認はしていません。\n「売上15億円」は2026年の売上見込み、「約375億円」は売上ではなく企業評価額です。円換算は1ドル＝150円です。\n\n■ 主な出典\n・The Wall Street Journal「The Rise of Million-Dollar Companies With Just One Employee」（2026年7月29日）\n・Yahoo Finance / Moneywise ほか関連報道\n・Ben Broca 氏の公開発信\n\n#AI #起業 #ショート",
@@ -14,13 +14,6 @@
     "founder": "",
     "logo": "",
     "site": ""
-  },
-  "style": {
-    "palette": "green",
-    "pattern": "dots",
-    "motion": "slide",
-    "caption": "box",
-    "header": "left"
   },
   "scenes": [
     {

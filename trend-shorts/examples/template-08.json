@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-14",
+  "template": 8,
+  "title": "実はやばい？社員ゼロの会社",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "risk",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ 実はやばい？",
+        "warnLabel": "AI利用料がかさみ…（本人談）",
+        "warn": "一部顧客で赤字",
+        "after": "無料のオープンソースAIへ",
+        "afterHighlight": "無料"
+      }
+    },
+    {
+      "id": "why",
+      "type": "bigtext",
+      "data": {
+        "kicker": "それでも",
+        "lines": [
+          "投資家は",
+          "注目している"
+        ],
+        "highlight": "注目"
+      }
+    },
+    {
+      "id": "g",
+      "type": "growth",
+      "data": {
+        "main": {
+          "label": "企業評価額（※売上ではない）",
+          "value": "約375億円"
+        },
+        "cards": [
+          {
+            "label": "有料顧客",
+            "value": "1万人"
+          },
+          {
+            "label": "売上見込み",
+            "value": "約15億円",
+            "tone": "red"
+          }
+        ]
+      }
+    },
+    {
+      "id": "vs",
+      "type": "versus",
+      "data": {
+        "before": {
+          "label": "心配",
+          "value": "コスト高",
+          "tone": "red"
+        },
+        "after": {
+          "label": "期待",
+          "value": "人件費ゼロ"
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "あなたは",
+          "アリ？ナシ？"
+        ],
+        "questionHighlight": "アリ？ナシ？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "risk",
+      "text": "社員ゼロの会社、\n実は赤字の顧客も。",
+      "reading": "社員ゼロの会社、実は赤字の顧客も。",
+      "highlight": [
+        "赤字"
+      ]
+    },
+    {
+      "scene": "why",
+      "text": "それでも投資家は\n注目しています。",
+      "reading": "それでも投資家は注目しています。",
+      "highlight": [
+        "注目"
+      ]
+    },
+    {
+      "scene": "g",
+      "text": "評価額は\n約375億円。",
+      "reading": "評価額は約375億円。",
+      "highlight": [
+        "約375億円"
+      ]
+    },
+    {
+      "scene": "vs",
+      "text": "心配はコスト、\n期待は人件費ゼロ。",
+      "reading": "心配はコスト、期待は人件費ゼロ。",
+      "highlight": [
+        "人件費ゼロ"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "あなたは\nアリ？ナシ？",
+      "reading": "あなたはアリ？ナシ？",
+      "highlight": [
+        "アリ？ナシ？"
+      ]
+    }
+  ]
+}

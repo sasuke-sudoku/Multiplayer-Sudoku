@@ -1,6 +1,6 @@
 ---
 name: company-shorts
-description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920、30〜60秒、VOICEVOX青山龍星のナレーション、白背景＋カード＋マーカー字幕の演出）を trend-shorts/ のRemotionプロジェクトで作る。「〇〇を紹介するショートを作って」「次の回を作って」「企業紹介の動画」などで使う。
+description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920、30〜60秒、VOICEVOX青山龍星のナレーション、白背景＋カード演出、10個のテンプレートを1→10の順番で毎日ローテーション）を trend-shorts/ のRemotionプロジェクトで作る。「〇〇を紹介するショートを作って」「次の回を作って」「企業紹介の動画」などで使う。
 ---
 
 # 企業・人物紹介ショートの作り方
@@ -9,39 +9,32 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 見本は `trend-shorts/episodes/polsia.json`。
 
 ## 毎回そろえるもの（シリーズの統一感）
-- **土台の見た目**: 白背景・グラデーションなし・カード＋字幕。`src/` の部品を使い、配色は下のパレットから選ぶ。
+- **土台の見た目**: 白背景・グラデーションなし・カード＋字幕（`src/` の部品）。
 - **声**: VOICEVOX:青山龍星（vvm 15, styleId 13, speed 1.15）。
 - **ネタ選び**: 下の「題材の選び方」に従う。
 
-## 毎回必ず変えるもの（常連さんを飽きさせない）
-同じ型が続くと飽きられる。**前回と「型」「スタイル」「シーン構成」のすべてを変える。**
-`scripts/build.sh` は `script/variety_check.py` で直近の回と比べ、似すぎていると止まる。
+## 10個のテンプレートを 1→2→…→10→1 の順番で使う
+常連さんを飽きさせないため、テンプレートは毎回変わる。**順番は飛ばさない・入れ替えない。**
+- 次に使う番号: `python3 script/next_template.py`（`episodes/` の最新回の次の番号と、作るべきシーンを表示）
+- テンプレートの中身: `trend-shorts/templates/templates.json`（型・シリーズ名・スタイル・シーンの順番と役割）
+- 各テンプレートの見本: `trend-shorts/examples/template-01.json` 〜 `template-10.json`
+  （01 は実際の投稿回、02〜10 はレイアウト確認用のサンプル。数字・発言はそのまま使わない）
+- エピソードには `"template": 番号` を書く。`style` は書かない（テンプレートのものが自動で使われる）。
+  `scenes` の type はテンプレートと**同じ順番・同じ数**にする。`series` は省略するとテンプレートのものになる。
+- `scripts/build.sh` は `script/template_check.py` でシーン構成と順番を確認し、違えば止まる。
 
-### 1. 型（`format`）— 直近2回と違うものを選ぶ
-| format | 中身 | 向いているシーン例 |
-|---|---|---|
-| `story` | 挫折→転機→成功→影の物語 | profile, reveal, growth, warning |
-| `quiz` | 「何人で運営？」など問題→正解で驚かせる | quiz, timeline, versus |
-| `ranking` | 「〇〇な会社TOP3」で比べる | ranking, stats, bigtext |
-| `versus` | ふつうの会社 vs この会社 | versus, grid, chart |
-| `numbers` | 3つの数字で丸わかり | stats, chart, growth |
-| `quote` | 本人の言葉から入る（実際の発言のみ） | quote, timeline, bigtext |
-| `secrets` | 成功の理由を3つ | bigtext, grid, versus |
-| `contrarian` | 「実はやばい？」課題から入って評価する | warning, bigtext, chart |
-
-### 2. スタイル（`style`）— palette は前回と違うもの、5項目のうち3つ以上を前回から変える
-| キー | 選択肢 |
-|---|---|
-| `palette` | `blue` `green` `orange` `purple` `teal`（メインの色） |
-| `pattern` | `grid` `dots` `stripes` `plain`（背景の模様） |
-| `motion` | `pop` `slide` `zoom` `wipe`（シーンの切り替わり方） |
-| `caption` | `marker`（黄色マーカー） `box`（黒い帯） `underline`（下線） |
-| `header` | `center`（中央） `left`（左寄せ＋色帯） |
-
-### 3. シーン構成（`scenes`）
-- 最初のシーンの type を前回と変える。前回使っていない type を1つ以上入れる。
-- 直近3回とシーンの並びが50%以上一致しないようにする。
-- 長さは30〜60秒で自由。冒頭2〜3秒で「え？」と思わせ、最後は問いかけか登録の呼びかけで終える。
+| No. | 型 | 中身 | シーン | 色 |
+|---|---|---|---|---|
+| 1 | ストーリー型 | 挫折→転機→成功→影の物語で人物を追う | stats → profile → reveal → growth → grid → warning → question | blue |
+| 2 | クイズ型 | 「社員は何人？」のような問題で始め、正解で驚かせる | quiz → timeline → versus → warning → question | green |
+| 3 | ランキング型 | 同じテーマの企業・人物を3位から順に紹介し、1位を深掘り | bigtext → ranking → stats → warning → question | orange |
+| 4 | 比較型 | ふつうの会社 vs この会社の対比で違いを際立たせる | versus → profile → grid → chart → question | purple |
+| 5 | 数字で見る型 | 3つの数字だけで会社を丸わかりにする | stats → chart → growth → bigtext → question | teal |
+| 6 | 名言型 | 本人の実際の発言から入り、その言葉の背景を追う | quote → profile → timeline → warning → question | blue |
+| 7 | 成功の秘密型 | 成功の理由を3つに絞って解説する | bigtext → grid → chart → warning → question | orange |
+| 8 | 逆張り型 | 「実はやばい？」と課題から入り、最後に公平に評価する | warning → bigtext → growth → versus → question | purple |
+| 9 | 年表型 | 創業から今までを年表で一気にたどる | timeline → profile → stats → quiz → question | green |
+| 10 | 図鑑型 | 会社をカード図鑑のように紹介する（事業・人・数字・強み） | reveal → profile → grid → ranking → question | teal |
 
 ## 題材の選び方
 - 直近1〜2週間に海外または日本で話題になった企業・人物。`episodes/` の既存回と重複しない。
@@ -54,8 +47,8 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 - 円換算は1ドル=150円で統一し、概要欄に書く。裏付けが取れない話は断定しないか使わない。出典は画面に出さず概要欄へ。
 
 ## エピソードJSON
-- `date`（YYYY-MM-DD）, `format`, `style`（上の表）
-- `series`（シリーズ名。型に合わせて変えてよい。例: 🧠 企業クイズ）, `title`（「？」で2行に分かれる。各行15文字以内）, `description`（概要欄。VOICEVOXクレジットは自動付与）,
+- `date`（YYYY-MM-DD）, `template`（1〜10）
+- `series`（省略可。テンプレートのシリーズ名が入る）, `title`（「？」で2行に分かれる。各行15文字以内）, `description`（概要欄。VOICEVOXクレジットは自動付与）,
   `voice`, `images`（`founder`・`logo`・`site`、空欄可）
 - `scenes`: `{ "id", "type", "data" }` の配列。好きな順・好きな数で並べる。同じ type を何度使ってもよい。
 - `lines`: ナレーション。`scene`（scenes の id）、`text`（字幕。`\n` で改行、1行15文字以内）、
@@ -80,12 +73,12 @@ description: 話題の企業・人物を紹介するYouTube Shorts（1080×1920�
 | `quote` | 発言を1文字ずつ表示（実際の発言のみ） | `quote`, `by`, `highlight` |
 | `chart` | 折れ線グラフが伸びる | `label`, `unit`, `points[{x,y}]` |
 数値は "約375億円" のように書くとカウントアップする。`tone: "red"` で赤系。
-見本: `episodes/polsia.json`（story型）、`examples/polsia-quiz.json`（quiz型・同じ題材を別の型で作った例）。
+見本: `examples/template-01.json` 〜 `template-10.json`。
 
 ## 手順
 1. 題材を選ぶ（候補3つ→1つに決める）。WebSearch で事実確認。
-2. `episodes/` の直近の回の `format`・`style`・`scenes` を確認し、すべて変えた構成を決めて `episodes/<slug>.json` を書く。
-   `python3 script/variety_check.py episodes/<slug>.json` が OK になるまで直す。
+2. `python3 script/next_template.py` で今回のテンプレート番号を確認し、`examples/template-<番号>.json` を見本に
+   `episodes/<slug>.json` を書く（シーンの type と順番はテンプレートどおり、中身は題材に合わせる）。
 3. ビルド:
    ```bash
    cd trend-shorts

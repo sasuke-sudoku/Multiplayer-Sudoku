@@ -15,6 +15,11 @@ GAP = 0.12  # seconds of silence after each line
 
 src = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "episodes/polsia.json"
 script = json.loads(src.read_text())
+# The episode's template decides the look (style) and the default series label.
+if "template" in script:
+    tpl = {t["no"]: t for t in json.loads((ROOT / "templates/templates.json").read_text())}[script["template"]]
+    script["style"] = tpl["style"]
+    script.setdefault("series", tpl["series"])
 voice = script["voice"]
 ort = Onnxruntime.load_once(filename=str(next(VV.glob("voicevox_onnxruntime-*/lib/libvoicevox_onnxruntime.so.*.*"))))
 synth = Synthesizer(ort, OpenJtalk(os.path.join(os.path.dirname(pyopenjtalk.__file__), "dictionary")))

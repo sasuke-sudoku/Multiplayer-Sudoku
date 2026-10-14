@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-14",
+  "template": 7,
+  "title": "成功の秘密は？社員ゼロの会社",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "bigtext",
+      "data": {
+        "kicker": "成功の秘密",
+        "lines": [
+          "ポイントは",
+          "3つだけ"
+        ],
+        "highlight": "3つ"
+      }
+    },
+    {
+      "id": "grid",
+      "type": "grid",
+      "data": {
+        "tasks": [
+          "① AIに任せる",
+          "② 失敗を糧に",
+          "③ 小さく売る",
+          "④ 発信し続ける"
+        ],
+        "taskTag": "秘密 ✔",
+        "stamp": "だから一人で回る"
+      }
+    },
+    {
+      "id": "chart",
+      "type": "chart",
+      "data": {
+        "label": "売上規模の推移（報道ベース・円換算）",
+        "unit": "億円",
+        "points": [
+          {
+            "x": "初期",
+            "y": 4.5
+          },
+          {
+            "x": "中盤",
+            "y": 10.5
+          },
+          {
+            "x": "2026見込み",
+            "y": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "risk",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ まねする前に",
+        "warnLabel": "AI利用料は",
+        "warn": "想像以上に高い",
+        "after": "安いモデルへの切り替えも",
+        "afterHighlight": "安い"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "どの秘密を",
+          "まねしたい？"
+        ],
+        "questionHighlight": "まねしたい？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "open",
+      "text": "成功の秘密は\n3つだけ。",
+      "reading": "成功の秘密は3つだけ。",
+      "highlight": [
+        "3つ"
+      ]
+    },
+    {
+      "scene": "grid",
+      "text": "AIに任せ、失敗を糧に、\n小さく売る。",
+      "reading": "AIに任せ、失敗を糧に、小さく売る。",
+      "highlight": [
+        "AIに任せ"
+      ]
+    },
+    {
+      "scene": "chart",
+      "text": "その結果、\n売上規模は急拡大。",
+      "reading": "その結果、売上規模は急拡大。",
+      "highlight": [
+        "急拡大"
+      ]
+    },
+    {
+      "scene": "risk",
+      "text": "ただしAI利用料は\n想像以上に高い。",
+      "reading": "ただしAI利用料は想像以上に高い。",
+      "highlight": [
+        "高い"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "どの秘密を\nまねしたいですか？",
+      "reading": "どの秘密をまねしたいですか？",
+      "highlight": [
+        "まねしたい"
+      ]
+    }
+  ]
+}

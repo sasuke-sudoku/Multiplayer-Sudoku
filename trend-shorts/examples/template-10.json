@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-14",
+  "template": 10,
+  "title": "どんな会社？Polsia図鑑",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "reveal",
+      "data": {
+        "date": "2025.12 公開",
+        "name": "Polsia",
+        "flow": [
+          "立ち上げ",
+          "運営"
+        ],
+        "pill": "🤖 AIがまるごと代行"
+      }
+    },
+    {
+      "id": "who",
+      "type": "profile",
+      "data": {
+        "name": "Polsia",
+        "emoji": "🏢",
+        "rows": [
+          {
+            "label": "創業",
+            "value": "2025年12月"
+          },
+          {
+            "label": "社員",
+            "value": "0人（創業者のみ）"
+          },
+          {
+            "label": "顧客",
+            "value": "有料1万人"
+          }
+        ],
+        "chips": [],
+        "chipMark": ""
+      }
+    },
+    {
+      "id": "grid",
+      "type": "grid",
+      "data": {
+        "tasks": [
+          "🤖 事業立ち上げ",
+          "📣 集客",
+          "💬 サポート",
+          "📊 運営"
+        ],
+        "taskTag": "強み ✔",
+        "stamp": "全部AIで完結"
+      }
+    },
+    {
+      "id": "rank",
+      "type": "ranking",
+      "data": {
+        "title": "一人起業 注目度",
+        "items": [
+          {
+            "label": "Polsia",
+            "value": "約375億円"
+          },
+          {
+            "label": "Base44",
+            "value": "約120億円"
+          },
+          {
+            "label": "サンプル社",
+            "value": "約30億円"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "使ってみたい",
+          "と思う？"
+        ],
+        "questionHighlight": "使ってみたい",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "open",
+      "text": "今日の図鑑は\nPolsia。",
+      "reading": "今日の図鑑はPolsia。",
+      "highlight": [
+        "Polsia"
+      ]
+    },
+    {
+      "scene": "who",
+      "text": "創業は2025年12月、\n社員はゼロ。",
+      "reading": "創業は2025年12月、社員はゼロ。",
+      "highlight": [
+        "社員はゼロ"
+      ]
+    },
+    {
+      "scene": "grid",
+      "text": "事業の立ち上げから\n運営までAIが担当。",
+      "reading": "事業の立ち上げから運営までAIが担当。",
+      "highlight": [
+        "AIが担当"
+      ]
+    },
+    {
+      "scene": "rank",
+      "text": "一人起業の中でも\n注目度はトップ級。",
+      "reading": "一人起業の中でも注目度はトップ級。",
+      "highlight": [
+        "トップ級"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "使ってみたいと\n思いますか？",
+      "reading": "使ってみたいと思いますか？",
+      "highlight": [
+        "使ってみたい"
+      ]
+    }
+  ]
+}

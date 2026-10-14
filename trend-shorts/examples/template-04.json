@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-14",
+  "template": 4,
+  "title": "何が違う？ふつうの会社とPolsia",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "vs",
+      "type": "versus",
+      "data": {
+        "before": {
+          "label": "ふつうの会社",
+          "value": "社員100人"
+        },
+        "after": {
+          "label": "Polsia",
+          "value": "社員0人",
+          "tone": "red"
+        }
+      }
+    },
+    {
+      "id": "who",
+      "type": "profile",
+      "data": {
+        "name": "Ben Broca",
+        "emoji": "👨‍💻",
+        "rows": [
+          {
+            "label": "年齢",
+            "value": "40歳"
+          },
+          {
+            "label": "会社",
+            "value": "Polsia（創業者）"
+          }
+        ],
+        "chips": [],
+        "chipMark": ""
+      }
+    },
+    {
+      "id": "how",
+      "type": "grid",
+      "data": {
+        "tasks": [
+          "📧 メール",
+          "💻 開発",
+          "💬 サポート",
+          "💸 返金"
+        ],
+        "taskTag": "AIが担当 ✔",
+        "stamp": "人は1人だけ"
+      }
+    },
+    {
+      "id": "chart",
+      "type": "chart",
+      "data": {
+        "label": "売上規模の推移（報道ベース・円換算）",
+        "unit": "億円",
+        "points": [
+          {
+            "x": "初期",
+            "y": 4.5
+          },
+          {
+            "x": "中盤",
+            "y": 10.5
+          },
+          {
+            "x": "2026見込み",
+            "y": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "あなたの会社は",
+          "何人いる？"
+        ],
+        "questionHighlight": "何人いる？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "vs",
+      "text": "ふつうなら100人規模。",
+      "reading": "ふつうなら100人規模。",
+      "highlight": []
+    },
+    {
+      "scene": "vs",
+      "text": "でもPolsiaは\n社員ゼロ。",
+      "reading": "でもPolsiaは社員ゼロ。",
+      "highlight": [
+        "社員ゼロ"
+      ]
+    },
+    {
+      "scene": "who",
+      "text": "動かすのは\nベン・ブロカ一人。",
+      "reading": "動かすのはベン・ブロカ一人。",
+      "highlight": [
+        "一人"
+      ]
+    },
+    {
+      "scene": "how",
+      "text": "仕事はぜんぶAI。",
+      "reading": "仕事はぜんぶAI。",
+      "highlight": [
+        "AI"
+      ]
+    },
+    {
+      "scene": "chart",
+      "text": "売上規模は\n伸び続けています。",
+      "reading": "売上規模は伸び続けています。",
+      "highlight": [
+        "伸び続け"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "あなたの会社は\n何人いますか？",
+      "reading": "あなたの会社は何人いますか？",
+      "highlight": [
+        "何人"
+      ]
+    }
+  ]
+}

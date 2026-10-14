@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-14",
+  "template": 9,
+  "title": "どう伸びた？Polsiaの年表",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "t",
+      "type": "timeline",
+      "data": {
+        "events": [
+          {
+            "date": "〜2025",
+            "text": "AIソフトが不発",
+            "tone": "red"
+          },
+          {
+            "date": "2025.12",
+            "text": "Polsia公開"
+          },
+          {
+            "date": "2026.5",
+            "text": "評価額 約375億円"
+          },
+          {
+            "date": "2026.7",
+            "text": "顧客1万人"
+          }
+        ]
+      }
+    },
+    {
+      "id": "who",
+      "type": "profile",
+      "data": {
+        "name": "Ben Broca",
+        "emoji": "👨‍💻",
+        "rows": [
+          {
+            "label": "年齢",
+            "value": "40歳"
+          },
+          {
+            "label": "会社",
+            "value": "Polsia（創業者）"
+          }
+        ],
+        "chips": [],
+        "chipMark": ""
+      }
+    },
+    {
+      "id": "num",
+      "type": "stats",
+      "data": {
+        "stats": [
+          {
+            "label": "社員",
+            "value": "0人"
+          },
+          {
+            "label": "顧客",
+            "value": "1万人"
+          }
+        ],
+        "tagline": ""
+      }
+    },
+    {
+      "id": "q",
+      "type": "quiz",
+      "data": {
+        "question": "次の1年で\n顧客はどうなる？",
+        "choices": [
+          "減る",
+          "横ばい",
+          "増える"
+        ],
+        "answer": 2,
+        "note": "※予想です"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "あなたの",
+          "予想は？"
+        ],
+        "questionHighlight": "予想は？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "t",
+      "text": "不発続きから、\nわずか半年で急成長。",
+      "reading": "不発続きから、わずか半年で急成長。",
+      "highlight": [
+        "急成長"
+      ]
+    },
+    {
+      "scene": "who",
+      "text": "中心にいるのは\nベン・ブロカ。",
+      "reading": "中心にいるのはベン・ブロカ。",
+      "highlight": [
+        "ベン・ブロカ"
+      ]
+    },
+    {
+      "scene": "num",
+      "text": "いまは社員0人で\n顧客1万人。",
+      "reading": "いまは社員0人で顧客1万人。",
+      "highlight": [
+        "社員0人"
+      ]
+    },
+    {
+      "scene": "q",
+      "text": "次の1年で\n顧客はどうなる？",
+      "reading": "次の1年で顧客はどうなる？",
+      "highlight": [
+        "どうなる？"
+      ]
+    },
+    {
+      "scene": "q",
+      "text": "多くの人は\n増えると予想。",
+      "reading": "多くの人は増えると予想。",
+      "highlight": [
+        "増える"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "あなたの予想は？",
+      "reading": "あなたの予想は？",
+      "highlight": [
+        "予想は？"
+      ]
+    }
+  ]
+}

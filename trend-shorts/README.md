@@ -5,7 +5,8 @@
 
 - 作り方の手順（Claude Code のスキル）: `../.claude/skills/company-shorts/SKILL.md`
 - 別のプロンプトで新しい回を作るときの文面: `PROMPT.md`
-- 見本の回: `episodes/polsia.json`（story型）、`examples/polsia-quiz.json`（同じ題材をquiz型にした例）
+- 投稿済みの回: `episodes/`（最新回の template 番号から次の番号が決まる）
+- テンプレート見本: `examples/template-01.json` 〜 `template-10.json`
 
 ## クイックスタート
 
@@ -31,8 +32,9 @@ npx remotion studio                          # 最後にビルドした回をプ
 
 シーンタイプ: `stats` `bigtext` `profile` `reveal` `growth` `versus` `grid` `warning` `question` `ranking` `quiz` `timeline` `quote` `chart`。
 
-毎回変化をつけるため、`date`・`format`（型）・`style`（配色・模様・動き・字幕・見出し）も書きます。
-`build.sh` は `script/variety_check.py` で直近の回と比べ、型・スタイル・シーンの並びが似すぎていると止まります（詳しくはスキル参照）。
+10個のテンプレート（`templates/templates.json`）を **1→2→…→10→1 の順番** で使います。エピソードには `template` 番号を書き、
+シーンの type と順番はテンプレートに合わせます（スタイルは自動）。次の番号は `python3 script/next_template.py` で確認できます。
+`build.sh` は `script/template_check.py` で構成と順番を確認し、違えば止まります。見本は `examples/template-01.json`〜`template-10.json`。
 
 ## ファイル構成
 

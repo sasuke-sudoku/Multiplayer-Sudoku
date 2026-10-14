@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-14",
+  "template": 5,
+  "title": "3つの数字で？Polsiaが丸わかり",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "num",
+      "type": "stats",
+      "data": {
+        "stats": [
+          {
+            "label": "社員",
+            "value": "0人"
+          },
+          {
+            "label": "顧客",
+            "value": "1万人"
+          },
+          {
+            "label": "売上見込み",
+            "value": "15億円",
+            "tone": "red"
+          }
+        ],
+        "tagline": ""
+      }
+    },
+    {
+      "id": "chart",
+      "type": "chart",
+      "data": {
+        "label": "売上規模の推移（報道ベース・円換算）",
+        "unit": "億円",
+        "points": [
+          {
+            "x": "初期",
+            "y": 4.5
+          },
+          {
+            "x": "中盤",
+            "y": 10.5
+          },
+          {
+            "x": "2026見込み",
+            "y": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "g",
+      "type": "growth",
+      "data": {
+        "main": {
+          "label": "企業評価額（※売上ではない）",
+          "value": "約375億円"
+        },
+        "cards": [
+          {
+            "label": "調達額",
+            "value": "約45億円"
+          },
+          {
+            "label": "社員",
+            "value": "0人",
+            "tone": "red"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mean",
+      "type": "bigtext",
+      "data": {
+        "kicker": "つまり",
+        "lines": [
+          "一人でも",
+          "大企業並み"
+        ],
+        "highlight": "一人"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "一番驚いた",
+          "数字はどれ？"
+        ],
+        "questionHighlight": "数字はどれ？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "num",
+      "text": "社員0人、顧客1万人、\n売上見込み15億円。",
+      "reading": "社員0人、顧客1万人、売上見込み15億円。",
+      "highlight": [
+        "社員0人"
+      ]
+    },
+    {
+      "scene": "chart",
+      "text": "売上規模は\n右肩上がり。",
+      "reading": "売上規模は右肩上がり。",
+      "highlight": [
+        "右肩上がり"
+      ]
+    },
+    {
+      "scene": "g",
+      "text": "評価額は\n約375億円。",
+      "reading": "評価額は約375億円。",
+      "highlight": [
+        "約375億円"
+      ]
+    },
+    {
+      "scene": "mean",
+      "text": "一人でも\n大企業並みです。",
+      "reading": "一人でも大企業並みです。",
+      "highlight": [
+        "一人"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "一番驚いた数字は\nどれですか？",
+      "reading": "一番驚いた数字はどれですか？",
+      "highlight": [
+        "どれですか？"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-14",
+  "template": 3,
+  "title": "社員ゼロでも稼ぐ？一人起業TOP3",
+  "description": "レイアウト確認用のサンプルです（このまま投稿しないでください）。",
+  "voice": {
+    "name": "青山龍星",
+    "vvm": 15,
+    "styleId": 13,
+    "speed": 1.15
+  },
+  "images": {
+    "founder": "",
+    "logo": "",
+    "site": ""
+  },
+  "scenes": [
+    {
+      "id": "open",
+      "type": "bigtext",
+      "data": {
+        "kicker": "ランキング",
+        "lines": [
+          "ほぼ一人で",
+          "大きく稼ぐ会社"
+        ],
+        "highlight": "一人"
+      }
+    },
+    {
+      "id": "rank",
+      "type": "ranking",
+      "data": {
+        "title": "一人起業 注目度TOP3",
+        "items": [
+          {
+            "label": "Polsia",
+            "value": "約375億円"
+          },
+          {
+            "label": "Base44",
+            "value": "約120億円"
+          },
+          {
+            "label": "サンプル社",
+            "value": "約30億円"
+          }
+        ]
+      }
+    },
+    {
+      "id": "num",
+      "type": "stats",
+      "data": {
+        "stats": [
+          {
+            "label": "社員",
+            "value": "0人"
+          },
+          {
+            "label": "顧客",
+            "value": "1万人"
+          },
+          {
+            "label": "評価額",
+            "value": "約375億円",
+            "tone": "red"
+          }
+        ],
+        "tagline": ""
+      }
+    },
+    {
+      "id": "risk",
+      "type": "warning",
+      "data": {
+        "header": "⚠️ ただし",
+        "warnLabel": "AI利用料がかさみ…（本人談）",
+        "warn": "一部顧客で赤字",
+        "after": "無料のオープンソースAIへ",
+        "afterHighlight": "無料"
+      }
+    },
+    {
+      "id": "end",
+      "type": "question",
+      "data": {
+        "question": [
+          "次に来るのは",
+          "どんな会社？"
+        ],
+        "questionHighlight": "どんな会社？",
+        "comment": "👇 コメントで教えてね"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "scene": "open",
+      "text": "ほぼ一人で稼ぐ会社、\nランキングです。",
+      "reading": "ほぼ一人で稼ぐ会社、ランキングです。",
+      "highlight": [
+        "一人"
+      ]
+    },
+    {
+      "scene": "rank",
+      "text": "3位から発表します。\n1位はPolsia。",
+      "reading": "3位から発表します。1位はPolsia。",
+      "highlight": [
+        "Polsia"
+      ]
+    },
+    {
+      "scene": "num",
+      "text": "社員ゼロで\n顧客は1万人。",
+      "reading": "社員ゼロで顧客は1万人。",
+      "highlight": [
+        "社員ゼロ"
+      ]
+    },
+    {
+      "scene": "risk",
+      "text": "ただし、赤字の\n顧客もいたそう。",
+      "reading": "ただし、赤字の顧客もいたそう。",
+      "highlight": [
+        "赤字"
+      ]
+    },
+    {
+      "scene": "end",
+      "text": "次に来るのは\nどんな会社？",
+      "reading": "次に来るのはどんな会社？",
+      "highlight": [
+        "どんな会社？"
+      ]
+    }
+  ]
+}

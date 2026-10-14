@@ -1,0 +1,360 @@
+[
+  {
+    "no": 1,
+    "name": "ストーリー型",
+    "concept": "挫折→転機→成功→影の物語で人物を追う",
+    "series": "🏢 注目の企業・人物",
+    "style": {
+      "palette": "blue",
+      "pattern": "grid",
+      "motion": "pop",
+      "caption": "marker",
+      "header": "center"
+    },
+    "scenes": [
+      {
+        "type": "stats",
+        "role": "驚きの数字3つで掴む"
+      },
+      {
+        "type": "profile",
+        "role": "人物プロフィールと過去の挫折"
+      },
+      {
+        "type": "reveal",
+        "role": "会社・サービスの登場"
+      },
+      {
+        "type": "growth",
+        "role": "成長の数字"
+      },
+      {
+        "type": "grid",
+        "role": "仕組みを4つ＋決め台詞"
+      },
+      {
+        "type": "warning",
+        "role": "光と影"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 2,
+    "name": "クイズ型",
+    "concept": "「社員は何人？」のような問題で始め、正解で驚かせる",
+    "series": "🧠 企業クイズ",
+    "style": {
+      "palette": "green",
+      "pattern": "dots",
+      "motion": "slide",
+      "caption": "box",
+      "header": "left"
+    },
+    "scenes": [
+      {
+        "type": "quiz",
+        "role": "問題→2行目で正解"
+      },
+      {
+        "type": "timeline",
+        "role": "ここまでの道のり"
+      },
+      {
+        "type": "versus",
+        "role": "ふつうの会社との違い"
+      },
+      {
+        "type": "warning",
+        "role": "課題"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 3,
+    "name": "ランキング型",
+    "concept": "同じテーマの企業・人物を3位から順に紹介し、1位を深掘り",
+    "series": "🏆 注目ランキング",
+    "style": {
+      "palette": "orange",
+      "pattern": "stripes",
+      "motion": "zoom",
+      "caption": "underline",
+      "header": "center"
+    },
+    "scenes": [
+      {
+        "type": "bigtext",
+        "role": "ランキングのお題"
+      },
+      {
+        "type": "ranking",
+        "role": "3位→1位の発表"
+      },
+      {
+        "type": "stats",
+        "role": "1位の数字"
+      },
+      {
+        "type": "warning",
+        "role": "1位の課題"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 4,
+    "name": "比較型",
+    "concept": "ふつうの会社 vs この会社の対比で違いを際立たせる",
+    "series": "⚔️ ビフォーアフター",
+    "style": {
+      "palette": "purple",
+      "pattern": "plain",
+      "motion": "wipe",
+      "caption": "marker",
+      "header": "left"
+    },
+    "scenes": [
+      {
+        "type": "versus",
+        "role": "ふつう vs この会社"
+      },
+      {
+        "type": "profile",
+        "role": "誰がやっているのか"
+      },
+      {
+        "type": "grid",
+        "role": "違いを生む仕組み4つ"
+      },
+      {
+        "type": "chart",
+        "role": "結果の数字の推移"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 5,
+    "name": "数字で見る型",
+    "concept": "3つの数字だけで会社を丸わかりにする",
+    "series": "📊 数字で見る",
+    "style": {
+      "palette": "teal",
+      "pattern": "grid",
+      "motion": "slide",
+      "caption": "box",
+      "header": "center"
+    },
+    "scenes": [
+      {
+        "type": "stats",
+        "role": "3つの数字"
+      },
+      {
+        "type": "chart",
+        "role": "数字の推移"
+      },
+      {
+        "type": "growth",
+        "role": "評価額・売上の内訳"
+      },
+      {
+        "type": "bigtext",
+        "role": "数字が意味すること"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 6,
+    "name": "名言型",
+    "concept": "本人の実際の発言から入り、その言葉の背景を追う",
+    "series": "💬 この一言",
+    "style": {
+      "palette": "blue",
+      "pattern": "dots",
+      "motion": "zoom",
+      "caption": "underline",
+      "header": "left"
+    },
+    "scenes": [
+      {
+        "type": "quote",
+        "role": "本人の実際の発言（引用元必須）"
+      },
+      {
+        "type": "profile",
+        "role": "発言した人"
+      },
+      {
+        "type": "timeline",
+        "role": "発言に至るまで"
+      },
+      {
+        "type": "warning",
+        "role": "その裏の課題"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 7,
+    "name": "成功の秘密型",
+    "concept": "成功の理由を3つに絞って解説する",
+    "series": "🔑 成功の秘密",
+    "style": {
+      "palette": "orange",
+      "pattern": "plain",
+      "motion": "pop",
+      "caption": "box",
+      "header": "center"
+    },
+    "scenes": [
+      {
+        "type": "bigtext",
+        "role": "「成功の秘密は3つ」"
+      },
+      {
+        "type": "grid",
+        "role": "秘密を並べる＋決め台詞"
+      },
+      {
+        "type": "chart",
+        "role": "秘密が生んだ結果"
+      },
+      {
+        "type": "warning",
+        "role": "まねする前の注意"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 8,
+    "name": "逆張り型",
+    "concept": "「実はやばい？」と課題から入り、最後に公平に評価する",
+    "series": "🤔 実はどうなの？",
+    "style": {
+      "palette": "purple",
+      "pattern": "stripes",
+      "motion": "slide",
+      "caption": "marker",
+      "header": "center"
+    },
+    "scenes": [
+      {
+        "type": "warning",
+        "role": "いきなり課題・リスク"
+      },
+      {
+        "type": "bigtext",
+        "role": "それでも注目される理由"
+      },
+      {
+        "type": "growth",
+        "role": "伸びている数字"
+      },
+      {
+        "type": "versus",
+        "role": "心配 vs 期待"
+      },
+      {
+        "type": "question",
+        "role": "あなたはどう思う？＋登録"
+      }
+    ]
+  },
+  {
+    "no": 9,
+    "name": "年表型",
+    "concept": "創業から今までを年表で一気にたどる",
+    "series": "📅 年表で見る",
+    "style": {
+      "palette": "green",
+      "pattern": "grid",
+      "motion": "wipe",
+      "caption": "underline",
+      "header": "left"
+    },
+    "scenes": [
+      {
+        "type": "timeline",
+        "role": "創業から今まで"
+      },
+      {
+        "type": "profile",
+        "role": "中心人物"
+      },
+      {
+        "type": "stats",
+        "role": "今の数字"
+      },
+      {
+        "type": "quiz",
+        "role": "次はどうなる？クイズ"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  },
+  {
+    "no": 10,
+    "name": "図鑑型",
+    "concept": "会社をカード図鑑のように紹介する（事業・人・数字・強み）",
+    "series": "📘 1分でわかる会社図鑑",
+    "style": {
+      "palette": "teal",
+      "pattern": "dots",
+      "motion": "pop",
+      "caption": "marker",
+      "header": "left"
+    },
+    "scenes": [
+      {
+        "type": "reveal",
+        "role": "会社名の登場"
+      },
+      {
+        "type": "profile",
+        "role": "基本データ"
+      },
+      {
+        "type": "grid",
+        "role": "事業・強み4つ"
+      },
+      {
+        "type": "ranking",
+        "role": "同業との比較ランキング"
+      },
+      {
+        "type": "question",
+        "role": "問いかけ＋登録"
+      }
+    ]
+  }
+]
