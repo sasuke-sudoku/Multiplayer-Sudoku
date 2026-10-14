@@ -9,9 +9,9 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 // Start frame of the scene's second narration line (falls back to 1s in).
 const secondLine = (s: SceneTiming) => s.lines[1]?.from ?? 30;
-// Spread n items evenly over the scene's first narration line.
+// Spread n items over the first 60% of the scene's first line, so the last one settles before the line ends.
 const stagger = (s: SceneTiming, n: number, offset = 2) => (i: number) =>
-  offset + i * Math.floor((s.lines[0].duration - offset) / Math.max(1, n));
+  offset + i * Math.floor((s.lines[0].duration * 0.6 - offset) / Math.max(1, n));
 
 // "約375億円" → counts up the number, keeps the prefix/suffix. Values without a number render as-is.
 const Value: React.FC<{ value: string; start: number; duration?: number }> = ({ value, start, duration }) => {
